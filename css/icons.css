@@ -1,0 +1,55 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('/fonts/icomoon.eot?-y4ut8j');
+	src:url('/fonts/icomoon.eot?#iefix-y4ut8j') format('embedded-opentype'),
+		url('/fonts/icomoon.woff?-y4ut8j') format('woff'),
+		url('/fonts/icomoon.ttf?-y4ut8j') format('truetype'),
+		url('/fonts/icomoon.svg?-y4ut8j#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-print:before {
+	content: "\e600";
+}
+.icon-screen:before {
+	content: "\e601";
+}
+.icon-laptop:before {
+	content: "\e602";
+}
+.icon-mobile:before {
+	content: "\e603";
+}
+.icon-mobile2:before {
+	content: "\e604";
+}
+.icon-tablet:before {
+	content: "\e605";
+}
+.icon-tv:before {
+	content: "\e606";
+}
+.icon-spinner:before {
+	content: "\e607";
+}
+.icon-spinner2:before {
+	content: "\e608";
+}
+.icon-spinner3:before {
+	content: "\e609";
+}

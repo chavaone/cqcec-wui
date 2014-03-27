@@ -1,0 +1,12 @@
+<ul id="connections">
+	{{#each connections}}
+	<li id="conn{{@index}}" class="connection">
+		<span class="icon-screen type_icon"></span>
+		<ul class="ip_info">
+			<li class="ip">{{@key}}</li>
+			<li class="hostname">{{hostname}} </li>
+			<li class="macvendor">{{vendor}} </li>
+		</ul>
+	</li>
+	{{/each}}
+</ul>

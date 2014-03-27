@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CQCEC</title>
+
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://bootswatch.com/superhero/bootstrap.min.css">
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
+	<link rel="stylesheet" href="css/cqcec.css">
+	<link rel="stylesheet" href="css/icons.css">
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars.runtime-v1.3.0.js"></script>
+	<script src="templates/connectiondetails.handlebars.js"></script>
+	<script src="templates/connections.handlebars.js"></script>
+	<script src="templates/historical.handlebars.js"></script>
+	<script src="templates/networkmap.handlebars.js"></script>
+	<script src="js/Chart.min.js"></script>
+	<script src="js/cqcec.js"></script>
+
+</head>
+<body>
+	<div id="wrap">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<header class="page-header">
+						<h1>CQCEC <small>v.0.8&beta;</small></h1>
+					</header>
+
+					<div class="collapse navbar-collapse">
+
+						<ul class="nav navbar-nav nav-pills">
+							<li id="map_tab" class="active">
+								<a href="javascript:void(0)" onclick="app.enable_network_map_tab()"><span class="glyphicon glyphicon-cloud"></span>Mapa de Rede</a>
+							</li>
+
+							<li id="stats_tab">
+								<a href="javascript:void(0)" onclick="app.enable_stats_tab()"><span class="glyphicon glyphicon-stats"></span>Estatísticas</a>
+							</li>
+						</ul>
+
+						<div class="pull-right">
+							<a id="reload_main_icon" class="icon-spinner3" href="javascript:void(0)" onclick="app.reload()"></a>
+						</div>
+					</div>
+
+					<div id="web_body"></div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="footer">
+		<div class="container">
+			<p>Powered by <a href="http://getbootstrap.com/">Bootstrap</a>, <a href="http://python.org">Python</a>, some magic and some <a href="humans.txt">magicians</a>.</p>
+		</div>
+	</div>
+
+</body>
+</html>
