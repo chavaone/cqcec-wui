@@ -9,7 +9,7 @@
 	font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="moonicon-"], [class*=" moonicon-"] {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -23,33 +23,33 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-print:before {
+.moonicon-print:before {
 	content: "\e600";
 }
-.icon-screen:before {
+.moonicon-screen:before {
 	content: "\e601";
 }
-.icon-laptop:before {
+.moonicon-laptop:before {
 	content: "\e602";
 }
-.icon-mobile:before {
+.moonicon-mobile:before {
 	content: "\e603";
 }
-.icon-mobile2:before {
+.moonicon-mobile2:before {
 	content: "\e604";
 }
-.icon-tablet:before {
+.moonicon-tablet:before {
 	content: "\e605";
 }
-.icon-tv:before {
+.moonicon-tv:before {
 	content: "\e606";
 }
-.icon-spinner:before {
+.moonicon-spinner:before {
 	content: "\e607";
 }
-.icon-spinner2:before {
+.moonicon-spinner2:before {
 	content: "\e608";
 }
-.icon-spinner3:before {
+.moonicon-spinner3:before {
 	content: "\e609";
 }

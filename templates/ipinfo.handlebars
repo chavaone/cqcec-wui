@@ -1,0 +1,27 @@
+<div>
+	<header id="ip_info_header" class="page_header">
+		<button type="button" class="btn btn-default glyphicon glyphicon-chevron-left" onclick="app.populate_map_area()"></button>
+		<h3>{{ip}}</h3>
+	</header>
+	<ul class="nav nav-pills">
+		<li id="outgoing_tab">
+			<a href="javascript:void(0)" onclick="app.enable_ip_info_tab('{{ip}}', 'Outgoing')">
+				<span class="glyphicon glyphicon-chevron-up pull-left"></span>Saíntes<span class="badge pull-right">{{outgoing_conn}}</span>
+			</a>
+		</li>
+		<li id="incoming_tab">
+			<a href="javascript:void(0)" onclick="app.enable_ip_info_tab('{{ip}}', 'Incoming')">
+				<span class="glyphicon glyphicon-chevron-down pull-left"></span>Entrantes<span class="badge pull-right">{{incoming_conn}}</span>
+			</a>
+		</li>
+
+		<li id="stats_tab" class="disabled">
+			<a href="javascript:void(0)">
+				<span class="glyphicon glyphicon-stats"></span>
+				Estatísticas
+			</a>
+		</li>
+	</ul>
+	<div id="ip_info_body">
+	</div>
+</div>

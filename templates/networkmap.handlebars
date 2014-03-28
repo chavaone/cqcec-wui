@@ -1,7 +1,7 @@
-<ul id="connections">
+<ul id="conn_ips">
 	{{#each connections}}
-	<li id="conn{{@index}}" class="connection">
-		<span class="icon-screen type_icon"></span>
+	<li id="conn{{@index}}" class="connected_ip" onclick="app.enable_ip_info('{{@key}}')">
+		<span class="moonicon-screen type_icon"></span>
 		<ul class="ip_info">
 			<li class="ip">{{@key}}</li>
 			<li class="hostname">{{hostname}} </li>

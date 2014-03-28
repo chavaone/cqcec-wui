@@ -32,7 +32,7 @@ app.get_connections = function (callback) {
     }).done(function (data) {
         callback(false, data);
     }).fail(function () {
-        console.console.log("Petition fails...");
+        console.log("Petition fails...");
         callback(true);
     });
 };
@@ -43,6 +43,7 @@ app.get_connections = function (callback) {
 app.populate_connections = function (connections) {
     var html_body = Handlebars.templates.connections({"connections":connections});
     $("#web_body").html(html_body);
+    app._end_reload();
 };
 
 
@@ -83,6 +84,8 @@ app.show_historic = function () {
             scaleShowLabels: true,
             scaleOverlay:true
         });
+
+        app._end_reload();
     });
 };
 
@@ -105,16 +108,8 @@ app.show_filtered_data = function () {
 /**/
 
 app.populate_map_area = function () {
-    app.get_connections(function (fail, data) {
-        var html_body;
-
-        if (fail){
-            console.log("MERDA!!");
-            return;
-        }
-        html_body = Handlebars.templates.networkmap({"connections":data});
-        $("#web_body").html(html_body);
-    });
+    html_body = Handlebars.templates.networkmap({"connections":app.connections});
+    $("#web_body").html(html_body);
 }
 
 app.populate_stats = function () {
@@ -133,7 +128,7 @@ app._end_reload =function  () {
 app.reload = function () {
     var fun_dic;
     app._start_reload();
-    fun_dic = {"stats_tab": app.populate_stats, "map_tab": app.populate_map_area};
+    fun_dic = {"stats_tab": app.populate_stats, "map_tab": app.reload_map_tab};
     fun_dic[app.enabled_tab]();
 };
 
@@ -141,7 +136,18 @@ app.reload_stats_tab = function (argument) {
 };
 
 app.reload_map_tab = function (argument) {
-    app.populate_map_area();
+    app.get_connections(function (fail, data) {
+        var html_body;
+
+        if (fail){
+            console.log("MERDA!!");
+            return;
+        }
+
+        app.connections = data;
+        app.populate_map_area();
+        app._end_reload();
+    });
 };
 
 
@@ -159,5 +165,39 @@ app._enable_tab_function_creator = function (id) {
 
 app.enable_stats_tab = app._enable_tab_function_creator("stats_tab");
 app.enable_network_map_tab = app._enable_tab_function_creator("map_tab");
+
+
+app.enable_ip_info = function (ip) {
+    ip_info = app.connections[ip];
+
+    out_conn = ip_info["Outgoing"];
+    inc_conn = ip_info["Incoming"];
+
+    var html_body = Handlebars.templates.ipinfo(
+        {"ip": ip,
+         "incoming_conn": inc_conn.length,
+         "outgoing_conn": out_conn.length});
+    $("#web_body").html(html_body);
+
+    app.enable_ip_info_tab(ip, "Outgoing");
+};
+
+app.enable_ip_info_tab = function (ip, direction){
+    var ip_info = app.connections[ip];
+    var is_incoming = direction === "Incoming";
+
+    var html_body = Handlebars.templates.connections({"connections": ip_info[direction], "incoming": is_incoming});
+    $("#ip_info_body").html(html_body);
+}
+
+app.show_ip_connection_details = function (id, ip) {
+    $("#conn" + id + " .more").slideToggle("slow");
+
+    app.get_info_from_ip(ip, function(fail,  data) {
+        console.log(data);
+        var html_body = Handlebars.templates.connectiondetails({"info": data})
+        $("#conn" + id + " .more").html(html_body);
+    });
+}
 
 $(document).ready(app.enable_network_map_tab);
