@@ -68,11 +68,8 @@ def ip_is_reachable(ip):
 
 
 def ip_is_insteresting(ip):
-    if not (ipserviceinfo.ip_is_me(ip) or ipserviceinfo.ip_is_local(ip)):
-        return False
-    if ip.startswith("127."):
-        return filter_and_sort_connections
-    return True
+    return (ipserviceinfo.ip_is_me(ip) or ipserviceinfo.ip_is_local(ip)) and \
+        not ip.startswith("127.") and not ipserviceinfo.ip_is_multicast(ip)
 
 
 def router_connections():
@@ -98,6 +95,17 @@ def router_connections():
             for x in router_connections]
 
 
+def add_conn_to_dict(dicionario, conn):
+    direct = conn["direction"]
+    lista = dicionario[conn["ip_origen"]][direct] if direct == "Outgoing" \
+            else dicionario[conn["ip_dest"]][direct]
+    try:
+        ext_conn = lista[lista.index(conn)]
+        ext_conn.number = ext_conn.number + 1
+    except ValueError:
+        lista.append(conn)
+
+
 def filter_and_sort_connections(connections):
     ips_out = [x["ip_origen"] for x in connections if x["direction"] == "Outgoing"]
     ips_dest = [x["ip_dest"] for x in connections if x["direction"] == "Incoming"]
@@ -107,19 +115,12 @@ def filter_and_sort_connections(connections):
     ret_conn_dict = {x: {"Outgoing": [], "Incoming": []} for x in ips}
 
     for c in connections:
-        try:
-            if c["direction"] == "Outgoing":
-                ret_conn_dict[c["ip_origen"]][c["direction"]].append(c)
-            elif c["direction"] == "Incoming":
-                ret_conn_dict[c["ip_dest"]][c["direction"]].append(c)
-            else:
-                assert(False)
-        except:
-            pass
+        add_conn_to_dict(ret_conn_dict, c)
+
     for x in ret_conn_dict:
         ip_info = ipserviceinfo.get_ip_info(x)
         ret_conn_dict[x]["hostname"] = ip_info["hostname"] if "hostname" in ip_info and ip_info["hostname"] else "unknown hostname"
-        ret_conn_dict[x]["vendor"] = ip_info["mac_vendor"] if "mac_vendor" in ip_info and ip_info["mac_vendor"]  else "unknown mac  vendor"
+        ret_conn_dict[x]["vendor"] = ip_info["mac_vendor"] if "mac_vendor" in ip_info and ip_info["mac_vendor"] else "unknown mac  vendor"
 
     return ret_conn_dict
 
