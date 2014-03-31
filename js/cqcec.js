@@ -56,7 +56,7 @@ app.show_historic = function () {
     ctx = document.getElementById("historic_chart").getContext("2d");
 
     $.ajax({
-        url: "cgi-bin/get-historic.py"
+        url: "cgi-bin/get_historical.py"
     }).done(function (data) {
 
         var x = Math.floor(data.length / 6);
