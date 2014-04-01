@@ -6,6 +6,9 @@
 				<span class="ip">{{this.ip_origen}}</span>
 				<span class="glyphicon glyphicon-arrow-right"></span>
 				<span class="proto">{{this.proto}}</span>
+				{{#if this.number}}
+				<span class="badge number_badge pull-right">{{this.number}}</span>
+				{{/if}}
 			</div>
 		<div class="more">
 	 		<hr>
@@ -24,6 +27,9 @@
 				<span class="proto">{{this.proto}}</span>
 				<span class="glyphicon glyphicon-arrow-right"></span>
 				<span class="ip">{{this.ip_dest}}</span>
+				{{#if this.number}}
+				<span class="badge number_badge pull-right">{{this.number}}</span>
+				{{/if}}
 			</div>
 			<div class="more">
 		 		<hr>

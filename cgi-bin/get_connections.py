@@ -71,8 +71,7 @@ def ip_is_reachable(ip):
 
 
 def ip_is_insteresting(ip):
-    return (ipserviceinfo.ip_is_me(ip) or ipserviceinfo.ip_is_local(ip)) and \
-        not ip.startswith("127.") and not ipserviceinfo.ip_is_multicast(ip)
+    return ipserviceinfo.ip_is_local(ip) and not ipserviceinfo.ip_is_multicast(ip)
 
 
 def router_connections():
@@ -87,38 +86,56 @@ def router_connections():
     else:
         raise NotImplementedError("Router not supported.")
 
-    router_connections = client.get_connections()
-
-    return [{"ip_origen": x.ip_orig,
-             "ip_dest": x.ip_dest,
-             "proto": get_proto_from_port(x.port_dest
-                                          if x.dir == "Outgoing"
-                                          else x.port_orig, x.proto),
-             "direction": x.dir}
-            for x in router_connections]
+    return client.get_connections()
 
 
 def add_conn_to_dict(dicionario, conn):
-    direct = conn["direction"]
-    lista = dicionario[conn["ip_origen"]][direct] if direct == "Outgoing" \
-            else dicionario[conn["ip_dest"]][direct]
+    direct = conn.dir
+    lista = dicionario[conn.ip_orig][direct] if direct == "Outgoing" \
+            else dicionario[conn.ip_dest][direct]
     try:
-        ext_conn = lista[lista.index(conn)]
-        ext_conn.number = ext_conn.number + 1
+        ind = lista.index(conn)
+        if lista[ind].number:
+            lista[ind].number = lista[ind].number + 1
+        else:
+            lista[ind].number = 2
     except ValueError:
         lista.append(conn)
 
 
 def filter_and_sort_connections(connections):
-    ips_out = [x["ip_origen"] for x in connections if x["direction"] == "Outgoing"]
-    ips_dest = [x["ip_dest"] for x in connections if x["direction"] == "Incoming"]
+    ips_out = [x.ip_orig for x in connections if x.dir == "Outgoing"]
+    ips_dest = [x.ip_dest for x in connections if x.dir == "Incoming"]
     ips = list(set(ips_out + ips_dest))
     ips = filter(ip_is_insteresting, ips)
 
-    ret_conn_dict = {x: {"Outgoing": [], "Incoming": []} for x in ips}
+    conn_dict = {x: {"Outgoing": [], "Incoming": []} for x in ips}
 
     for c in connections:
-        add_conn_to_dict(ret_conn_dict, c)
+        try:
+            add_conn_to_dict(conn_dict, c)
+        except KeyError:
+            pass
+
+    ret_conn_dict = {x: {"Outgoing": [], "Incoming": []} for x in ips}
+
+    for ip in conn_dict:
+        ret_conn_dict[ip]["Outgoing"] = [{"ip_origen": x.ip_orig,
+                                      "ip_dest": x.ip_dest,
+                                      "proto": get_proto_from_port(x.port_dest
+                                                  if x.dir == "Outgoing"
+                                                  else x.port_orig, x.proto),
+                                      "direction": x.dir,
+                                      "number": x.number}
+                                     for x in conn_dict[ip]["Outgoing"]]
+        ret_conn_dict[ip]["Incoming"] = [{"ip_origen": x.ip_orig,
+                                      "ip_dest": x.ip_dest,
+                                      "proto": get_proto_from_port(x.port_dest
+                                                  if x.dir == "Incoming"
+                                                  else x.port_orig, x.proto),
+                                      "direction": x.dir,
+                                      "number": x.number}
+                                     for x in conn_dict[ip]["Incoming"]]
 
     for x in ret_conn_dict:
         ip_info = ipserviceinfo.get_ip_info(x)

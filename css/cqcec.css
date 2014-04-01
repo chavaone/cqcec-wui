@@ -207,3 +207,11 @@ background-color:#cccccc;
 background-color:#df691a;
 border-radius:10px;
 }
+
+.number_badge {
+  background-color: white;
+  border-color: transparent;
+  color: #4e5d6c;
+  font-weight: bold;
+  margin-top: 0.5em;
+}

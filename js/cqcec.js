@@ -163,20 +163,31 @@ app._enable_tab_function_creator = function (id) {
     };
 };
 
+app.get_number_of_connections = function (conns) {
+    var ret = 0;
+    for (var i = conns.length - 1; i >= 0; i--) {
+        if (conns[i].number == 0) {
+            ret++;
+        } else {
+            ret += conns[i].number;
+        }
+    };
+    return ret;
+}
+
 app.enable_stats_tab = app._enable_tab_function_creator("stats_tab");
 app.enable_network_map_tab = app._enable_tab_function_creator("map_tab");
 
-
 app.enable_ip_info = function (ip) {
-    ip_info = app.connections[ip];
+    var ip_info = app.connections[ip];
 
-    out_conn = ip_info["Outgoing"];
-    inc_conn = ip_info["Incoming"];
+    var out_conn = ip_info["Outgoing"];
+    var inc_conn = ip_info["Incoming"];
 
     var html_body = Handlebars.templates.ipinfo(
         {"ip": ip,
-         "incoming_conn": inc_conn.length,
-         "outgoing_conn": out_conn.length});
+         "incoming_conn": app.get_number_of_connections(inc_conn),
+         "outgoing_conn": app.get_number_of_connections(out_conn)});
     $("#web_body").html(html_body);
 
     app.enable_ip_info_tab(ip, "Outgoing");
