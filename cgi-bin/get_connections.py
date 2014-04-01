@@ -127,7 +127,8 @@ def filter_and_sort_connections(connections):
                                                   else x.port_orig, x.proto),
                                       "direction": x.dir,
                                       "number": x.number}
-                                     for x in conn_dict[ip]["Outgoing"]]
+                                     for x in conn_dict[ip]["Outgoing"]
+                                     if not ipserviceinfo.ip_is_multicast(x.ip_dest)]
         ret_conn_dict[ip]["Incoming"] = [{"ip_origen": x.ip_orig,
                                       "ip_dest": x.ip_dest,
                                       "proto": get_proto_from_port(x.port_dest
@@ -135,7 +136,8 @@ def filter_and_sort_connections(connections):
                                                   else x.port_orig, x.proto),
                                       "direction": x.dir,
                                       "number": x.number}
-                                     for x in conn_dict[ip]["Incoming"]]
+                                     for x in conn_dict[ip]["Incoming"]
+                                     if not ipserviceinfo.ip_is_multicast(x.ip_orig)]
 
     for x in ret_conn_dict:
         ip_info = ipserviceinfo.get_ip_info(x)
