@@ -52,7 +52,10 @@ def get_proto_from_port(port, transport_proto):
     try:
         return socket.getservbyport(int(port), transport_proto.lower())
     except Exception:
-        return str(port) + "/" + str(transport_proto)
+        if port != "":
+            return str(port) + "/" + str(transport_proto)
+        else:
+            return str(transport_proto)
 
 
 def ip_is_reachable(ip):
