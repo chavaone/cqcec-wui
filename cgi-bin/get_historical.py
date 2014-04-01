@@ -12,7 +12,7 @@ def get_bd_name():
     cfg.read(["/etc/cqcec_config.cfg"])
 
     try:
-        bd_name = cfg.read("historical", "bd_name")
+        bd_name = cfg.get("historical", "bd_name")
         return bd_name
     except ConfigParser.NoOptionError:
         raise ValueError("Some options were not found at config file.")
