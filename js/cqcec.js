@@ -108,6 +108,11 @@ app.show_filtered_data = function () {
 /**/
 
 app.populate_map_area = function () {
+
+    Handlebars.registerHelper('connnum', function(arr) {
+        return app.get_number_of_connections(arr);
+    });
+
     html_body = Handlebars.templates.networkmap({"connections":app.connections});
     $("#web_body").html(html_body);
 }

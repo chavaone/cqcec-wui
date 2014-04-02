@@ -7,6 +7,18 @@
 			<li class="hostname">{{hostname}} </li>
 			<li class="macvendor">{{vendor}} </li>
 		</ul>
+		<ul class="numconn">
+			<li>
+				<span class="glyphicon glyphicon-chevron-up pull-left"></span>
+				Saíntes
+				<span class="badge pull-right">{{{connnum this.Outgoing}}}</span>
+			</li>
+			<li>
+				<span class="glyphicon glyphicon-chevron-down pull-left"></span>
+				Entrantes
+				<span class="badge pull-right">{{{connnum this.Incoming}}}</span>
+			</li>
+		</ul>
 	</li>
 	{{/each}}
 </ul>

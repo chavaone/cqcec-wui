@@ -23,11 +23,12 @@ body {
 li.connected_ip {
   list-style: none;
   width: inherit;
-  margin: 0em 0em 2em 2em;
+  margin: 0em 0em 1em 1em;
+  padding: 1em;
 }
 
 li.connected_ip:hover{
-  color:#df691a;
+  background-color:#df691a;
   opacity: 0.9;
 }
 
@@ -214,4 +215,16 @@ border-radius:10px;
   color: #4e5d6c;
   font-weight: bold;
   margin-top: 0.5em;
+}
+
+.numconn {
+  list-style: none;
+  padding: 0em;
+  margin-left: 2em;
+  display: inline-block;
+  width: 11vw;
+}
+
+.connected_ip li {
+  margin-bottom: 0.3em;
 }
