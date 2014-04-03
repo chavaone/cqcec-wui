@@ -3,7 +3,7 @@
 templates['networkmap'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
@@ -12,7 +12,11 @@ function program1(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" class=\"connected_ip\" onclick=\"app.enable_ip_info('"
     + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "')\">\n		<span class=\"moonicon-screen type_icon\"></span>\n		<ul class=\"ip_info\">\n			<li class=\"ip\">"
+    + "')\">\n		<span class=\"moonicon-screen computer_icon\"></span>\n		";
+  options = {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data};
+  stack2 = ((stack1 = helpers.ifether || (depth0 && depth0.ifether)),stack1 ? stack1.call(depth0, (depth0 && depth0.dev), options) : helperMissing.call(depth0, "ifether", (depth0 && depth0.dev), options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\n		<ul class=\"ip_info\">\n			<li class=\"ip\">"
     + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</li>\n			<li class=\"hostname\">";
   if (stack2 = helpers.hostname) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
@@ -32,6 +36,17 @@ function program1(depth0,data) {
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "</span>\n			</li>\n		</ul>\n	</li>\n	";
   return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  return "\n		<span class=\"moonicon-tree conn_icon\"></span>\n		";
+  }
+
+function program4(depth0,data) {
+  
+  
+  return "\n		<span class=\"moonicon-connection conn_icon\"></span>\n		";
   }
 
   buffer += "<ul id=\"conn_ips\">\n	";

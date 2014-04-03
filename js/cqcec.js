@@ -113,21 +113,29 @@ app.populate_map_area = function () {
         return app.get_number_of_connections(arr);
     });
 
+    Handlebars.registerHelper('ifether', function(dev, opts) {
+        if (dev.indexOf("eth") === 0){
+            return opts.fn(this);
+        } else {
+            return opts.inverse(this);
+        }
+    });
+
     html_body = Handlebars.templates.networkmap({"connections":app.connections});
     $("#web_body").html(html_body);
-}
+};
 
 app.populate_stats = function () {
     app.show_historic();
-}
+};
 
 app._start_reload = function () {
     $("#reload_main_icon").addClass("icon-spin");
-}
+};
 
 app._end_reload =function  () {
     $("#reload_main_icon").removeClass("icon-spin");
-}
+};
 
 /* Reload... */
 app.reload = function () {
@@ -170,8 +178,11 @@ app._enable_tab_function_creator = function (id) {
 
 app.get_number_of_connections = function (conns) {
     var ret = 0;
+
+    if (! conns) return 0;
+
     for (var i = conns.length - 1; i >= 0; i--) {
-        if (conns[i].number == 0) {
+        if (conns[i].number === 0) {
             ret++;
         } else {
             ret += conns[i].number;
@@ -204,7 +215,7 @@ app.enable_ip_info_tab = function (ip, direction){
 
     var html_body = Handlebars.templates.connections({"connections": ip_info[direction], "incoming": is_incoming});
     $("#ip_info_body").html(html_body);
-}
+};
 
 app.show_ip_connection_details = function (id, ip) {
     $("#conn" + id + " .more").slideToggle("slow");
@@ -214,6 +225,6 @@ app.show_ip_connection_details = function (id, ip) {
         var html_body = Handlebars.templates.connectiondetails({"info": data})
         $("#conn" + id + " .more").html(html_body);
     });
-}
+};
 
 $(document).ready(app.enable_network_map_tab);

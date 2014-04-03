@@ -1,7 +1,12 @@
 <ul id="conn_ips">
 	{{#each connections}}
 	<li id="conn{{@index}}" class="connected_ip" onclick="app.enable_ip_info('{{@key}}')">
-		<span class="moonicon-screen type_icon"></span>
+		<span class="moonicon-screen computer_icon"></span>
+		{{#ifether this.dev}}
+		<span class="moonicon-tree conn_icon"></span>
+		{{else}}
+		<span class="moonicon-connection conn_icon"></span>
+		{{/ifether}}
 		<ul class="ip_info">
 			<li class="ip">{{@key}}</li>
 			<li class="hostname">{{hostname}} </li>

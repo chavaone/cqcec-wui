@@ -20,6 +20,7 @@
 
 from cqcec_lib import fetchers
 from cqcec_lib import ipserviceinfo
+from cqcec_lib import networkmapfetcher
 
 
 def read_hitron_config():
@@ -72,6 +73,21 @@ def ip_is_reachable(ip):
 
 def ip_is_insteresting(ip):
     return ipserviceinfo.ip_is_local(ip) and not ipserviceinfo.ip_is_multicast(ip)
+
+
+def router_networkmap():
+    hitron_config = read_hitron_config()
+    ip_router = get_router_ip()
+    mac_router = ipserviceinfo.get_mac_from_local_ip(ip_router)
+
+    if mac_router[:8] in ("00:26:5b", "68:b6:fc"):
+        client = networkmapfetcher.HitronNetworkMapFetcher(hitron_config["user"],
+                                                   hitron_config["pass"],
+                                                   ip_router)
+    else:
+        raise NotImplementedError("Router not supported.")
+
+    return client.get_networkmap()
 
 
 def router_connections():
@@ -139,11 +155,6 @@ def filter_and_sort_connections(connections):
                                      for x in conn_dict[ip]["Incoming"]
                                      if not ipserviceinfo.ip_is_multicast(x.ip_orig)]
 
-    for x in ret_conn_dict:
-        ip_info = ipserviceinfo.get_ip_info(x)
-        ret_conn_dict[x]["hostname"] = ip_info["hostname"] if "hostname" in ip_info and ip_info["hostname"] else "unknown hostname"
-        ret_conn_dict[x]["vendor"] = ip_info["mac_vendor"] if "mac_vendor" in ip_info and ip_info["mac_vendor"] else "unknown mac  vendor"
-
     return ret_conn_dict
 
 
@@ -176,11 +187,25 @@ def print_not_implemented_error():
     sys.exit()
 
 
+def add_connections(networkmap, connections):
+    for ip in connections:
+        if ip in networkmap:
+            networkmap[ip]["Outgoing"] = connections[ip]["Outgoing"]
+            networkmap[ip]["Incoming"] = connections[ip]["Incoming"]
+
+
+def add_mac_vendor(networkmap):
+    for ip in networkmap:
+        networkmap[ip]["vendor"] = ipserviceinfo.get_device_manufacter_from_mac(networkmap[ip]["hardware_mac"])
+
 if __name__ == '__main__':
     try:
         connections = router_connections()
         connections = filter_and_sort_connections(connections)
-        print_connections(connections)
+        networkmap = router_networkmap()
+        add_connections(networkmap, connections)
+        add_mac_vendor(networkmap)
+        print_connections(networkmap)
     except NotImplementedError:
         print_not_implemented_error()
     except Exception, e:

@@ -23,33 +23,13 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.moonicon-print:before {
+
+.moonicon-connection:before {
 	content: "\e600";
 }
 .moonicon-screen:before {
 	content: "\e601";
 }
-.moonicon-laptop:before {
+.moonicon-tree:before {
 	content: "\e602";
-}
-.moonicon-mobile:before {
-	content: "\e603";
-}
-.moonicon-mobile2:before {
-	content: "\e604";
-}
-.moonicon-tablet:before {
-	content: "\e605";
-}
-.moonicon-tv:before {
-	content: "\e606";
-}
-.moonicon-spinner:before {
-	content: "\e607";
-}
-.moonicon-spinner2:before {
-	content: "\e608";
-}
-.moonicon-spinner3:before {
-	content: "\e609";
 }
