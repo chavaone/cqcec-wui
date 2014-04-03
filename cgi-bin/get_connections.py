@@ -21,6 +21,7 @@
 from cqcec_lib import fetchers
 from cqcec_lib import ipserviceinfo
 from cqcec_lib import networkmapfetcher
+from cqcec_lib import dnscachefetcher
 
 
 def read_hitron_config():
@@ -90,6 +91,21 @@ def router_networkmap():
     return client.get_networkmap()
 
 
+def router_dns_cache():
+    hitron_config = read_hitron_config()
+    ip_router = get_router_ip()
+    mac_router = ipserviceinfo.get_mac_from_local_ip(ip_router)
+
+    if mac_router[:8] in ("00:26:5b", "68:b6:fc"):
+        client = dnscachefetcher.HitronDNSFetcher(hitron_config["user"],
+                                                   hitron_config["pass"],
+                                                   ip_router)
+    else:
+        raise NotImplementedError("Router not supported.")
+
+    return client.get_dict()
+
+
 def router_connections():
     hitron_config = read_hitron_config()
     ip_router = get_router_ip()
@@ -119,7 +135,14 @@ def add_conn_to_dict(dicionario, conn):
         lista.append(conn)
 
 
-def filter_and_sort_connections(connections):
+def get_domain_from_dict(d, ip):
+    try:
+        return d[ip]
+    except KeyError:
+        return ""
+
+
+def filter_and_sort_connections(connections, dns_dict):
     ips_out = [x.ip_orig for x in connections if x.dir == "Outgoing"]
     ips_dest = [x.ip_dest for x in connections if x.dir == "Incoming"]
     ips = list(set(ips_out + ips_dest))
@@ -142,7 +165,10 @@ def filter_and_sort_connections(connections):
                                                   if x.dir == "Outgoing"
                                                   else x.port_orig, x.proto),
                                       "direction": x.dir,
-                                      "number": x.number}
+                                      "number": x.number,
+                                      "islocal": ipserviceinfo.ip_is_local(x.ip_dest),
+                                      "domain": get_domain_from_dict(dns_dict, x.ip_dest)
+                                      }
                                      for x in conn_dict[ip]["Outgoing"]
                                      if not ipserviceinfo.ip_is_multicast(x.ip_dest)]
         ret_conn_dict[ip]["Incoming"] = [{"ip_origen": x.ip_orig,
@@ -151,7 +177,9 @@ def filter_and_sort_connections(connections):
                                                   if x.dir == "Incoming"
                                                   else x.port_orig, x.proto),
                                       "direction": x.dir,
-                                      "number": x.number}
+                                      "number": x.number,
+                                      "islocal": ipserviceinfo.ip_is_local(x.ip_orig),
+                                      "domain": get_domain_from_dict(dns_dict, x.ip_orig)}
                                      for x in conn_dict[ip]["Incoming"]
                                      if not ipserviceinfo.ip_is_multicast(x.ip_orig)]
 
@@ -201,7 +229,8 @@ def add_mac_vendor(networkmap):
 if __name__ == '__main__':
     try:
         connections = router_connections()
-        connections = filter_and_sort_connections(connections)
+        dns_dict = router_dns_cache()
+        connections = filter_and_sort_connections(connections, dns_dict)
         networkmap = router_networkmap()
         add_connections(networkmap, connections)
         add_mac_vendor(networkmap)

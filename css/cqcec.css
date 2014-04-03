@@ -32,12 +32,32 @@ li.connected_ip:hover{
   opacity: 0.9;
 }
 
-.ip{
-  padding: 0em;
+li.ip {
   font-weight: bold;
   font-size: 1.5em;
-  width: 10em;
+}
+
+ul.ip{
+  list-style: none;
+  width: 15em;
   display: inline-block;
+  padding: 0em;
+}
+
+li.ip_add {
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  width: inherit;
+}
+
+li.domain {
+  font-weight: normal;
+  font-size: 1em;
+  text-align: center;
+  width: inherit;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .proto{
@@ -45,7 +65,9 @@ li.connected_ip:hover{
   font-size: 1.3em;
   text-transform: uppercase;
   display: inline-block;
-  width: 10em;
+  width: 15em;
+  vertical-align: middle;
+  height: inherit;
 }
 
 #reload_main_icon{
@@ -214,7 +236,8 @@ border-radius:10px;
   border-color: transparent;
   color: #4e5d6c;
   font-weight: bold;
-  margin-top: 0.5em;
+  margin-top: 1.5em;
+  float:left;
 }
 
 .numconn {

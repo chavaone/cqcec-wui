@@ -16,6 +16,10 @@ function program1(depth0,data) {
   options = {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data};
   stack2 = ((stack1 = helpers.ifether || (depth0 && depth0.ifether)),stack1 ? stack1.call(depth0, (depth0 && depth0.dev), options) : helperMissing.call(depth0, "ifether", (depth0 && depth0.dev), options));
   if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\n		";
+  options = {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data};
+  stack2 = ((stack1 = helpers.isenabled || (depth0 && depth0.isenabled)),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "isenabled", depth0, options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\n		<ul class=\"ip_info\">\n			<li class=\"ip\">"
     + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</li>\n			<li class=\"hostname\">";
@@ -47,6 +51,12 @@ function program4(depth0,data) {
   
   
   return "\n		<span class=\"moonicon-connection conn_icon\"></span>\n		";
+  }
+
+function program6(depth0,data) {
+  
+  
+  return "\n		<span class=\"moonicon-close enable_icon\"></span>\n		";
   }
 
   buffer += "<ul id=\"conn_ips\">\n	";

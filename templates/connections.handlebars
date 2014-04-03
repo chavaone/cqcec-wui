@@ -3,7 +3,20 @@
 		{{#each connections}}
 		<li id="conn{{@index}}" class="well well-sm connection" onclick="app.show_ip_connection_details('{{@index}}', '{{this.ip_origen}}')">
 			<div class="brief">
-				<span class="ip">{{this.ip_origen}}</span>
+				<ul class="ip">
+					<li class="ip_add">{{this.ip_orig}}</li>
+					<li class="domain">
+						{{#if this.islocal}}
+							(local)
+						{{else}}
+							{{#if this.domain}}
+								({{this.domain}})
+							{{else}}
+								(unknown)
+							{{/if}}
+						{{/if}}
+					</li>
+				</ul>
 				<span class="glyphicon glyphicon-arrow-right"></span>
 				<span class="proto">{{this.proto}}</span>
 				{{#if this.number}}
@@ -26,7 +39,20 @@
 			<div class="brief">
 				<span class="proto">{{this.proto}}</span>
 				<span class="glyphicon glyphicon-arrow-right"></span>
-				<span class="ip">{{this.ip_dest}}</span>
+				<ul class="ip">
+					<li class="ip_add">{{this.ip_dest}}</li>
+					<li class="domain">
+						{{#if this.islocal}}
+							(local)
+						{{else}}
+							{{#if this.domain}}
+								({{this.domain}})
+							{{else}}
+								(unknown)
+							{{/if}}
+						{{/if}}
+					</li>
+				</ul>
 				{{#if this.number}}
 				<span class="badge number_badge pull-right">{{this.number}}</span>
 				{{/if}}
