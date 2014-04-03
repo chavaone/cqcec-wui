@@ -33,3 +33,6 @@
 .moonicon-tree:before {
 	content: "\e602";
 }
+.moonicon-close:before {
+	content: "\e603";
+}

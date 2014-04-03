@@ -7,6 +7,9 @@
 		{{else}}
 		<span class="moonicon-connection conn_icon"></span>
 		{{/ifether}}
+		{{#isenabled this}}
+		<span class="moonicon-close enable_icon"></span>
+		{{/isenabled}}
 		<ul class="ip_info">
 			<li class="ip">{{@key}}</li>
 			<li class="hostname">{{hostname}} </li>

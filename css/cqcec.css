@@ -251,3 +251,8 @@ border-radius:10px;
 .connected_ip li {
   margin-bottom: 0.3em;
 }
+
+span.enable_icon {
+  color:red;
+  margin-left: -1.4em;
+}

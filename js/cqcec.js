@@ -121,6 +121,14 @@ app.populate_map_area = function () {
         }
     });
 
+    Handlebars.registerHelper('isenabled', function(ip,opts) {
+        if (ip.valid_time === "0"){
+            return opts.fn(this);
+        } else {
+            return opts.inverse(this);
+        }
+    });
+
     html_body = Handlebars.templates.networkmap({"connections":app.connections});
     $("#web_body").html(html_body);
 };
