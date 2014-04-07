@@ -113,6 +113,8 @@ app.populate_map_area = function () {
         return app.get_number_of_connections(arr);
     });
 
+    Handlebars.registerHelper("sizeconn", app.get_size_connections);
+
     Handlebars.registerHelper('ifether', function(dev, opts) {
         if (dev.indexOf("eth") === 0){
             return opts.fn(this);
@@ -184,6 +186,43 @@ app._enable_tab_function_creator = function (id) {
     };
 };
 
+app.get_size_connections = function (dir, outgoing, incoming) {
+    var size = 0;
+
+    var direct = dir === "in" ? "size_in" : "size_out";
+
+    if (outgoing) {
+        for (var i = outgoing.length - 1; i >= 0; i--) {
+            size += Number(outgoing[i][direct]);
+        }
+    }
+
+    if (incoming) {
+        for (var j = incoming.length - 1; j >= 0; j--) {
+            size += Number(incoming[j][direct]);
+        }
+    }
+
+    size = size * 1024;
+
+    var mega = size / (1024*1024);
+    var bites = size % (1024*1024);
+    var kilo = bites / 1024;
+    bites = bites % 1024;
+
+    ret = "";
+
+    if (Math.round(mega) !== 0){
+        return Math.round(mega) + "MB ";
+    }
+
+    if (Math.round(kilo) !== 0){
+        return Math.round(kilo) + "KB ";
+    }
+
+    return Math.round(bites) + "B";
+};
+
 app.get_number_of_connections = function (conns) {
     var ret = 0;
 
@@ -195,9 +234,9 @@ app.get_number_of_connections = function (conns) {
         } else {
             ret += conns[i].number;
         }
-    };
+    }
     return ret;
-}
+};
 
 app.enable_stats_tab = app._enable_tab_function_creator("stats_tab");
 app.enable_network_map_tab = app._enable_tab_function_creator("map_tab");

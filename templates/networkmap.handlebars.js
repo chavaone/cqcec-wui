@@ -38,6 +38,14 @@ function program1(depth0,data) {
   options = {hash:{},data:data};
   stack2 = ((stack1 = helpers.connnum || (depth0 && depth0.connnum)),stack1 ? stack1.call(depth0, (depth0 && depth0.Incoming), options) : helperMissing.call(depth0, "connnum", (depth0 && depth0.Incoming), options));
   if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "</span>\n			</li>\n		</ul>\n		<ul class=\"sizeconn\">\n			<li>\n				<span class=\"glyphicon glyphicon-chevron-up pull-left\"></span>\n				Tamaño Saíntes\n				<span class=\"badge pull-right\">";
+  options = {hash:{},data:data};
+  stack2 = ((stack1 = helpers.sizeconn || (depth0 && depth0.sizeconn)),stack1 ? stack1.call(depth0, "in", (depth0 && depth0.Outgoing), (depth0 && depth0.Incoming), options) : helperMissing.call(depth0, "sizeconn", "in", (depth0 && depth0.Outgoing), (depth0 && depth0.Incoming), options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "</span>\n			</li>\n			<li>\n				<span class=\"glyphicon glyphicon-chevron-down pull-left\"></span>\n				Tamaño Entrantes\n				<span class=\"badge pull-right\">";
+  options = {hash:{},data:data};
+  stack2 = ((stack1 = helpers.sizeconn || (depth0 && depth0.sizeconn)),stack1 ? stack1.call(depth0, "out", (depth0 && depth0.Outgoing), (depth0 && depth0.Incoming), options) : helperMissing.call(depth0, "sizeconn", "out", (depth0 && depth0.Outgoing), (depth0 && depth0.Incoming), options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "</span>\n			</li>\n		</ul>\n	</li>\n	";
   return buffer;
   }

@@ -77,14 +77,14 @@ def ip_is_insteresting(ip):
 
 
 def router_networkmap():
-    hitron_config = read_hitron_config()
     ip_router = get_router_ip()
     mac_router = ipserviceinfo.get_mac_from_local_ip(ip_router)
 
     if mac_router[:8] in ("00:26:5b", "68:b6:fc"):
+        hitron_config = read_hitron_config()
         client = networkmapfetcher.HitronNetworkMapFetcher(hitron_config["user"],
-                                                   hitron_config["pass"],
-                                                   ip_router)
+                                                           hitron_config["pass"],
+                                                           ip_router)
     else:
         raise NotImplementedError("Router not supported.")
 
@@ -92,14 +92,14 @@ def router_networkmap():
 
 
 def router_dns_cache():
-    hitron_config = read_hitron_config()
     ip_router = get_router_ip()
     mac_router = ipserviceinfo.get_mac_from_local_ip(ip_router)
 
     if mac_router[:8] in ("00:26:5b", "68:b6:fc"):
+        hitron_config = read_hitron_config()
         client = dnscachefetcher.HitronDNSFetcher(hitron_config["user"],
-                                                   hitron_config["pass"],
-                                                   ip_router)
+                                                  hitron_config["pass"],
+                                                  ip_router)
     else:
         raise NotImplementedError("Router not supported.")
 
@@ -107,11 +107,11 @@ def router_dns_cache():
 
 
 def router_connections():
-    hitron_config = read_hitron_config()
     ip_router = get_router_ip()
     mac_router = ipserviceinfo.get_mac_from_local_ip(ip_router)
 
     if mac_router[:8] in ("00:26:5b", "68:b6:fc"):
+        hitron_config = read_hitron_config()
         client = fetchers.HitronConnectionsFetcher(hitron_config["user"],
                                                    hitron_config["pass"],
                                                    ip_router)
@@ -129,8 +129,12 @@ def add_conn_to_dict(dicionario, conn):
         ind = lista.index(conn)
         if lista[ind].number:
             lista[ind].number = lista[ind].number + 1
+            lista[ind].size_in = lista[ind].size_in + conn.size_in
+            lista[ind].size_in = lista[ind].size_in + conn.size_out
         else:
             lista[ind].number = 2
+            lista[ind].size_in = lista[ind].size_in + conn.size_in
+            lista[ind].size_in = lista[ind].size_in + conn.size_out
     except ValueError:
         lista.append(conn)
 
@@ -167,7 +171,9 @@ def filter_and_sort_connections(connections, dns_dict):
                                       "direction": x.dir,
                                       "number": x.number,
                                       "islocal": ipserviceinfo.ip_is_local(x.ip_dest),
-                                      "domain": get_domain_from_dict(dns_dict, x.ip_dest)
+                                      "domain": get_domain_from_dict(dns_dict, x.ip_dest),
+                                      "size_in": x.size_in,
+                                      "size_out": x.size_out
                                       }
                                      for x in conn_dict[ip]["Outgoing"]
                                      if not ipserviceinfo.ip_is_multicast(x.ip_dest)]
@@ -179,7 +185,9 @@ def filter_and_sort_connections(connections, dns_dict):
                                       "direction": x.dir,
                                       "number": x.number,
                                       "islocal": ipserviceinfo.ip_is_local(x.ip_orig),
-                                      "domain": get_domain_from_dict(dns_dict, x.ip_orig)}
+                                      "domain": get_domain_from_dict(dns_dict, x.ip_orig),
+                                      "size_in": x.size_in,
+                                      "size_out": x.size_out}
                                      for x in conn_dict[ip]["Incoming"]
                                      if not ipserviceinfo.ip_is_multicast(x.ip_orig)]
 

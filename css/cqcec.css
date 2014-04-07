@@ -35,6 +35,7 @@ li.connected_ip:hover{
 li.ip {
   font-weight: bold;
   font-size: 1.5em;
+  width: 10em;
 }
 
 ul.ip{
@@ -246,6 +247,14 @@ border-radius:10px;
   margin-left: 2em;
   display: inline-block;
   width: 11vw;
+}
+
+.sizeconn {
+  list-style: none;
+  padding: 0em;
+  margin-left: 4em;
+  display: inline-block;
+  width: 16vw;
 }
 
 .connected_ip li {
