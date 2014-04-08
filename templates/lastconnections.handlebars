@@ -1,0 +1,50 @@
+<ul id="lastconnections">
+	{{#each connections}}
+	<li id="conn{{@index}}" class="well well-sm connection" onclick="app.show_ip_last_connection_details('{{@index}}', '{{this.ip_origen}}', '{{this.ip_dest}}')">
+		<div class="brief">
+			<ul class="ip">
+				<li class="ip_add">{{this.ip_origen}}</li>
+				<li class="domain">
+					{{#if this.orig_islocal}}
+						(local)
+					{{else}}
+						{{#if this.domain_orig}}
+							({{this.domain_orig}})
+						{{else}}
+							(unknown)
+						{{/if}}
+					{{/if}}
+				</li>
+			</ul>
+			<span class="glyphicon glyphicon-arrow-right"></span>
+			<span class="proto">{{this.proto}}</span>
+			<span class="glyphicon glyphicon-arrow-right"></span>
+			<ul class="ip">
+				<li class="ip_add">{{this.ip_dest}}</li>
+				<li class="domain">
+					{{#if this.dest_islocal}}
+						(local)
+					{{else}}
+						{{#if this.domain_dest}}
+							({{this.domain_dest}})
+						{{else}}
+							(unknown)
+						{{/if}}
+					{{/if}}
+				</li>
+			</ul>
+			{{#if this.number}}
+			<span class="badge number_badge pull-right">{{this.number}}</span>
+			{{/if}}
+		</div>
+		<div class="more">
+	 		<hr>
+	 		<div class="details">
+				<i class="icon-spin icon-refresh refresh-icon"></i>
+			</div>
+		</div>
+		</li>
+	{{else}}
+		<h4>Non hai conexións.</h4>
+	{{/each}}
+ </ul>

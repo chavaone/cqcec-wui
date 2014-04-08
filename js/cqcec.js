@@ -37,6 +37,17 @@ app.get_connections = function (callback) {
     });
 };
 
+app.get_last_connections = function (callback) {
+    $.ajax({
+        url: "cgi-bin/get_last_connections.py"
+    }).done(function (data) {
+        callback(false, data);
+    }).fail(function () {
+        console.log("Petition fails...");
+        callback(true);
+    });
+};
+
 
 /* Templates...*/
 
@@ -46,8 +57,40 @@ app.populate_connections = function (connections) {
     app._end_reload();
 };
 
+app.populate_last_connections = function (last_connections) {
+    html_body = Handlebars.templates.lastconnections({"connections":last_connections});
+    $("#web_body").html(html_body);
+};
 
-app.show_historic = function () {
+app.populate_map_area = function () {
+
+    Handlebars.registerHelper('connnum', function(arr) {
+        return app.get_number_of_connections(arr);
+    });
+
+    Handlebars.registerHelper("sizeconn", app.get_size_connections);
+
+    Handlebars.registerHelper('ifether', function(dev, opts) {
+        if (dev.indexOf("eth") === 0){
+            return opts.fn(this);
+        } else {
+            return opts.inverse(this);
+        }
+    });
+
+    Handlebars.registerHelper('isenabled', function(ip,opts) {
+        if (ip.valid_time === "0"){
+            return opts.fn(this);
+        } else {
+            return opts.inverse(this);
+        }
+    });
+
+    html_body = Handlebars.templates.networkmap({"connections":app.connections});
+    $("#web_body").html(html_body);
+};
+
+app.populate_stats = function () {
     var ctx;
 
     var html_body = Handlebars.templates.historical({});
@@ -90,101 +133,7 @@ app.show_historic = function () {
 };
 
 
-app.show_filtered_data = function () {
-
-    var filter_str, filter_data;
-
-    filter_str = $("input#filter_input").val();
-
-    filter_data = filter_str === "" ? app.connections :
-        app.connections.filter(function (item) {
-            return item.ip_origen.indexOf(filter_str) === 0;
-        }
-    );
-
-    app.populate_connections(filter_data);
-};
-
-/**/
-
-app.populate_map_area = function () {
-
-    Handlebars.registerHelper('connnum', function(arr) {
-        return app.get_number_of_connections(arr);
-    });
-
-    Handlebars.registerHelper("sizeconn", app.get_size_connections);
-
-    Handlebars.registerHelper('ifether', function(dev, opts) {
-        if (dev.indexOf("eth") === 0){
-            return opts.fn(this);
-        } else {
-            return opts.inverse(this);
-        }
-    });
-
-    Handlebars.registerHelper('isenabled', function(ip,opts) {
-        if (ip.valid_time === "0"){
-            return opts.fn(this);
-        } else {
-            return opts.inverse(this);
-        }
-    });
-
-    html_body = Handlebars.templates.networkmap({"connections":app.connections});
-    $("#web_body").html(html_body);
-};
-
-app.populate_stats = function () {
-    app.show_historic();
-};
-
-app._start_reload = function () {
-    $("#reload_main_icon").addClass("icon-spin");
-};
-
-app._end_reload =function  () {
-    $("#reload_main_icon").removeClass("icon-spin");
-};
-
-/* Reload... */
-app.reload = function () {
-    var fun_dic;
-    app._start_reload();
-    fun_dic = {"stats_tab": app.populate_stats, "map_tab": app.reload_map_tab};
-    fun_dic[app.enabled_tab]();
-};
-
-app.reload_stats_tab = function (argument) {
-};
-
-app.reload_map_tab = function (argument) {
-    app.get_connections(function (fail, data) {
-        var html_body;
-
-        if (fail){
-            console.log("MERDA!!");
-            return;
-        }
-
-        app.connections = data;
-        app.populate_map_area();
-        app._end_reload();
-    });
-};
-
-
-
-/* Enable tabs... */
-
-app._enable_tab_function_creator = function (id) {
-    return function () {
-        app.enabled_tab = id;
-        $("ul.nav-pills li").removeClass("active");
-        $("li#" + id).addClass("active");
-        app.reload();
-    };
-};
+/* Helpers */
 
 app.get_size_connections = function (dir, outgoing, incoming) {
     var size = 0;
@@ -238,8 +187,70 @@ app.get_number_of_connections = function (conns) {
     return ret;
 };
 
+
+/* Reload... */
+
+app._start_reload = function () {
+    $("#reload_main_icon").addClass("icon-spin");
+};
+
+app._end_reload =function  () {
+    $("#reload_main_icon").removeClass("icon-spin");
+};
+
+app.reload = function () {
+    var fun_dic;
+    app._start_reload();
+    fun_dic = {
+            "stats_tab": app.populate_stats,
+            "map_tab": app.reload_map_tab,
+            "last_conns_tab": app.reload_last_connections};
+    fun_dic[app.enabled_tab]();
+};
+
+app.reload_stats_tab = function (argument) {
+};
+
+app.reload_map_tab = function () {
+    app.get_connections(function (fail, data) {
+
+        if (fail){
+            console.log("MERDA1!!");
+            return;
+        }
+
+        app.connections = data;
+        app.populate_map_area();
+        app._end_reload();
+    });
+};
+
+app.reload_last_connections = function() {
+    app.get_last_connections(function (fail, data) {
+        if (fail) {
+            console.log("MERDA2!!")
+        }
+
+        app.populate_last_connections(data);
+        app._end_reload();
+    });
+};
+
+
+/* Enable tabs... */
+
+app._enable_tab_function_creator = function (id) {
+    return function () {
+        app.enabled_tab = id;
+        $("ul.nav-pills li").removeClass("active");
+        $("li#" + id).addClass("active");
+        app.reload();
+    };
+};
+
 app.enable_stats_tab = app._enable_tab_function_creator("stats_tab");
 app.enable_network_map_tab = app._enable_tab_function_creator("map_tab");
+app.enable_last_connections_tab = app._enable_tab_function_creator("last_conns_tab");
 
 app.enable_ip_info = function (ip) {
     var ip_info = app.connections[ip];
@@ -268,10 +279,22 @@ app.show_ip_connection_details = function (id, ip) {
     $("#conn" + id + " .more").slideToggle("slow");
 
     app.get_info_from_ip(ip, function(fail,  data) {
-        console.log(data);
         var html_body = Handlebars.templates.connectiondetails({"info": data})
         $("#conn" + id + " .more").html(html_body);
     });
+};
+
+app.show_ip_last_connection_details = function (id, ip_origen, ip_dest){
+
+    $("#conn" + id + " .more").slideToggle("slow");
+
+    app.get_info_from_ip(ip_origen, function(fail,  data_origen) {
+        app.get_info_from_ip(ip_dest, function(fail,  data_dest) {
+            var html_body = Handlebars.templates.connectiondetails2ips({"origen": data_origen, "destino": data_dest});
+            $("#conn" + id + " .more").html(html_body);
+        });
+    });
+
 };
 
 $(document).ready(app.enable_network_map_tab);

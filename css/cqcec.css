@@ -72,8 +72,9 @@ li.domain {
 }
 
 #reload_main_icon{
-  font-size: 2.5em;
+  font-size: 2em;
   color: white;
+  opacity: 0.8;
 }
 
 #reload_main_icon:hover{
@@ -119,7 +120,6 @@ ul#connections .more{
   display: block;
   height: 69vh;
   margin-top:1em;
-
 }
 
 #conn_ips::-webkit-scrollbar{
@@ -150,7 +150,21 @@ border-radius:4px;
 }
 
 .ip-info-box {
-  width: 97%;
+  width: 100%;
+  overflow-y: scroll;
+  max-height: 35vh;
+}
+
+.ip-info-box::-webkit-scrollbar{
+width:3px;
+background-color:#cccccc;
+opacity: 0.3;
+direction:ltr;
+}
+
+.ip-info-box::-webkit-scrollbar-thumb{
+background-color:#df691a;
+border-radius:4px;
 }
 
 #historic_chart{
@@ -264,4 +278,26 @@ border-radius:10px;
 span.enable_icon {
   color:red;
   margin-left: -1.4em;
+}
+
+ul#lastconnections {
+  padding: 0em;
+  overflow-y: scroll;
+  display: block;
+  height: 69vh;
+  margin-top:1em;
+}
+
+ul#lastconnections::-webkit-scrollbar{
+width:16px;
+background-color:#cccccc;
+}
+
+ul#lastconnections::-webkit-scrollbar-thumb{
+background-color:#df691a;
+border-radius:10px;
+}
+
+ul#lastconnections li.connection div.more {
+  display: none;
 }
