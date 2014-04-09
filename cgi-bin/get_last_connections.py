@@ -100,10 +100,12 @@ def get_domain_from_dict(d, ip):
 def connection_is_interesting(conn):
     if conn.dir == "Outgoing":
         return ipserviceinfo.ip_is_local(conn.ip_orig) and \
-               not ipserviceinfo.ip_is_multicast(conn.ip_orig)
+               not ipserviceinfo.ip_is_multicast(conn.ip_orig) and \
+               not ipserviceinfo.ip_is_me(conn.ip_orig)
     else:
         return ipserviceinfo.ip_is_local(conn.ip_dest) and \
-               not ipserviceinfo.ip_is_multicast(conn.ip_dest)
+               not ipserviceinfo.ip_is_multicast(conn.ip_dest) and \
+               not ipserviceinfo.ip_is_me(conn.ip_dest)
 
 
 def filter_and_sort_connections(connections, dns_dict):
