@@ -228,7 +228,7 @@ app.reload_map_tab = function () {
 app.reload_last_connections = function() {
     app.get_last_connections(function (fail, data) {
         if (fail) {
-            console.log("MERDA2!!")
+            console.log("get_last_connections fails!!");
         }
 
         app.populate_last_connections(data);
@@ -242,7 +242,7 @@ app.reload_last_connections = function() {
 app._enable_tab_function_creator = function (id) {
     return function () {
         app.enabled_tab = id;
-        $("l-nav ul li").removeClass("active");
+        $("div.l-nav ul li").removeClass("active");
         $("li#" + id).addClass("active");
         app.reload();
     };
@@ -297,4 +297,62 @@ app.show_ip_last_connection_details = function (id, ip_origen, ip_dest){
 
 };
 
-$(document).ready(app.enable_network_map_tab);
+
+app.update_domain_cache = function (ip, domain) {
+    console.log("IP::" + ip + " - DOMAIN::" + domain);
+    $.ajax({
+        type: "POST",
+        url: "cgi-bin/update_domain_cache.py",
+        data: {"ip": ip, "domain": domain}
+    }).done(function () {});
+};
+
+
+app.edit_domain_cache = function (ip, domain) {
+    $("#dialog-edit-domain #domain_field").val(domain);
+    $("#dialog-edit-domain #ip_field").val(ip);
+    $("#dialog-edit-domain #text_info").html("Editar dominio da IP <b>" + ip + "</b>");
+    $( "#dialog-edit-domain" ).dialog( "open" );
+};
+
+
+$(function () {
+
+    app.enable_network_map_tab();
+
+    $("#dialog-edit-domain").dialog(
+        {
+            title:"Editar Cache",
+            autoOpen: false,
+            modal: true,
+            height: 200,
+            width: 350,
+            buttons: [
+                {"text": "Aceptar",
+                 "class": "btn btn-default",
+                 "id": "boton-dialog-aceptar",
+                 "click": function() {
+                        var domain = $("#dialog-edit-domain #domain_field").val();
+                        var ip = $("#dialog-edit-domain #ip_field").val();
+                        app.update_domain_cache(ip, domain);
+                        $( this ).dialog( "close" );
+                    }
+                },
+                {"text":"Cancelar",
+                 "class": "btn btn-default",
+                 "id": "boton-dialog-cancelar",
+                 "click": function () {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            ],
+            create:function () {
+                $(this).closest(".ui-dialog")
+                    .find(".ui-button:first") // the first button
+                    .addClass("btn btn-default glyphicon glyphicon-remove")
+                    .attr("id","boton-dialog-cerrar");
+    }
+        }
+    );
+
+});

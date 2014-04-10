@@ -139,13 +139,6 @@ def add_conn_to_dict(dicionario, conn):
         lista.append(conn)
 
 
-def get_domain_from_dict(d, ip):
-    try:
-        return d[ip]
-    except KeyError:
-        return ""
-
-
 def filter_and_sort_connections(connections, dns_dict):
     ips_out = [x.ip_orig for x in connections if x.dir == "Outgoing"]
     ips_dest = [x.ip_dest for x in connections if x.dir == "Incoming"]
@@ -171,7 +164,7 @@ def filter_and_sort_connections(connections, dns_dict):
                                       "direction": x.dir,
                                       "number": x.number,
                                       "islocal": ipserviceinfo.ip_is_local(x.ip_dest),
-                                      "domain": get_domain_from_dict(dns_dict, x.ip_dest),
+                                      "domain": ipserviceinfo.get_domain_info(x.ip_dest, dns_dict),
                                       "size_in": x.size_in,
                                       "size_out": x.size_out
                                       }
@@ -185,7 +178,7 @@ def filter_and_sort_connections(connections, dns_dict):
                                       "direction": x.dir,
                                       "number": x.number,
                                       "islocal": ipserviceinfo.ip_is_local(x.ip_orig),
-                                      "domain": get_domain_from_dict(dns_dict, x.ip_orig),
+                                      "domain": ipserviceinfo.get_domain_info(x.ip_orig, dns_dict),
                                       "size_in": x.size_in,
                                       "size_out": x.size_out}
                                      for x in conn_dict[ip]["Incoming"]

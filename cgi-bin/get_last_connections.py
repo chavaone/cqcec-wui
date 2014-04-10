@@ -90,13 +90,6 @@ def add_conn_to_dict(dicionario, conn):
         lista.append(conn)
 
 
-def get_domain_from_dict(d, ip):
-    try:
-        return d[ip]
-    except KeyError:
-        return ""
-
-
 def connection_is_interesting(conn):
     if conn.dir == "Outgoing":
         return ipserviceinfo.ip_is_local(conn.ip_orig) and \
@@ -137,8 +130,8 @@ def filter_and_sort_connections(connections, dns_dict):
              "number": x.number,
              "orig_islocal": ipserviceinfo.ip_is_local(x.ip_orig),
              "dest_islocal": ipserviceinfo.ip_is_local(x.ip_dest),
-             "domain_orig": get_domain_from_dict(dns_dict, x.ip_orig),
-             "domain_dest": get_domain_from_dict(dns_dict, x.ip_dest),
+             "domain_orig": ipserviceinfo.get_domain_info(x.ip_orig, dns_dict),
+             "domain_dest": ipserviceinfo.get_domain_info(x.ip_dest, dns_dict),
              "size_in": x.size_in,
              "size_out": x.size_out}
             for x in lista if not ipserviceinfo.ip_is_multicast(x.ip_dest)]
