@@ -242,7 +242,7 @@ app.reload_last_connections = function() {
 app._enable_tab_function_creator = function (id) {
     return function () {
         app.enabled_tab = id;
-        $("ul.nav-pills li").removeClass("active");
+        $("l-nav ul li").removeClass("active");
         $("li#" + id).addClass("active");
         app.reload();
     };

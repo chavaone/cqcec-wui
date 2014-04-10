@@ -5,32 +5,38 @@
 			<ul class="ip">
 				<li class="ip_add">{{this.ip_origen}}</li>
 				<li class="domain">
-					{{#if this.orig_islocal}}
-						(local)
-					{{else}}
-						{{#if this.domain_orig}}
-							({{this.domain_orig}})
+					<span class="domain">
+						{{#if this.orig_islocal}}
+							(local)</span>
 						{{else}}
-							(unknown)
+							{{#if this.domain_orig}}
+								({{this.domain_orig}})
+							{{else}}
+								(unknown)
+							{{/if}}
+							</span>
+							<a class="icon-pencil edit_button" href="javascript:void(0)" onclick="app.edit_domain_cache('{{this.ip_dest}}', '{{this.domain_orig}}')"></a>
 						{{/if}}
-					{{/if}}
 				</li>
 			</ul>
-			<span class="glyphicon glyphicon-arrow-right"></span>
+			<span class="icon-chevron-sign-right"></span>
 			<span class="proto">{{this.proto}}</span>
-			<span class="glyphicon glyphicon-arrow-right"></span>
+			<span class="icon-chevron-sign-right"></span>
 			<ul class="ip">
 				<li class="ip_add">{{this.ip_dest}}</li>
 				<li class="domain">
-					{{#if this.dest_islocal}}
-						(local)
-					{{else}}
-						{{#if this.domain_dest}}
-							({{this.domain_dest}})
+					<span class="domain">
+						{{#if this.dest_islocal}}
+							(local)</span>
 						{{else}}
-							(unknown)
+							{{#if this.domain_dest}}
+								({{this.domain_dest}})
+							{{else}}
+								(unknown)
+							{{/if}}
+							</span>
+							<a class="icon-pencil edit_button" href="javascript:void(0)" onclick="app.edit_domain_cache('{{this.ip_dest}}', '{{this.domain_dest}}')"></a>
 						{{/if}}
-					{{/if}}
 				</li>
 			</ul>
 			{{#if this.number}}

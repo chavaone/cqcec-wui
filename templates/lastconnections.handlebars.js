@@ -18,14 +18,14 @@ function program1(depth0,data) {
     + escapeExpression(((stack1 = (depth0 && depth0.ip_dest)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "')\">\n		<div class=\"brief\">\n			<ul class=\"ip\">\n				<li class=\"ip_add\">"
     + escapeExpression(((stack1 = (depth0 && depth0.ip_origen)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</li>\n				<li class=\"domain\">\n					";
+    + "</li>\n				<li class=\"domain\">\n					<span class=\"domain\">\n						";
   stack2 = helpers['if'].call(depth0, (depth0 && depth0.orig_islocal), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n				</li>\n			</ul>\n			<span class=\"glyphicon glyphicon-arrow-right\"></span>\n			<span class=\"proto\">"
+  buffer += "\n				</li>\n			</ul>\n			<span class=\"icon-chevron-sign-right\"></span>\n			<span class=\"proto\">"
     + escapeExpression(((stack1 = (depth0 && depth0.proto)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>\n			<span class=\"glyphicon glyphicon-arrow-right\"></span>\n			<ul class=\"ip\">\n				<li class=\"ip_add\">"
+    + "</span>\n			<span class=\"icon-chevron-sign-right\"></span>\n			<ul class=\"ip\">\n				<li class=\"ip_add\">"
     + escapeExpression(((stack1 = (depth0 && depth0.ip_dest)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</li>\n				<li class=\"domain\">\n					";
+    + "</li>\n				<li class=\"domain\">\n					<span class=\"domain\">\n						";
   stack2 = helpers['if'].call(depth0, (depth0 && depth0.dest_islocal), {hash:{},inverse:self.program(9, program9, data),fn:self.program(2, program2, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\n				</li>\n			</ul>\n			";
@@ -37,48 +37,56 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   
-  return "\n						(local)\n					";
+  return "\n							(local)</span>\n						";
   }
 
 function program4(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n						";
+  buffer += "\n							";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.domain_orig), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					";
+  buffer += "\n							</span>\n							<a class=\"icon-pencil edit_button\" href=\"javascript:void(0)\" onclick=\"app.edit_domain_cache('"
+    + escapeExpression(((stack1 = (depth0 && depth0.ip_dest)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "', '"
+    + escapeExpression(((stack1 = (depth0 && depth0.domain_orig)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "')\"></a>\n						";
   return buffer;
   }
 function program5(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n							("
+  buffer += "\n								("
     + escapeExpression(((stack1 = (depth0 && depth0.domain_orig)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")\n						";
+    + ")\n							";
   return buffer;
   }
 
 function program7(depth0,data) {
   
   
-  return "\n							(unknown)\n						";
+  return "\n								(unknown)\n							";
   }
 
 function program9(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n						";
+  buffer += "\n							";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.domain_dest), {hash:{},inverse:self.program(7, program7, data),fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					";
+  buffer += "\n							</span>\n							<a class=\"icon-pencil edit_button\" href=\"javascript:void(0)\" onclick=\"app.edit_domain_cache('"
+    + escapeExpression(((stack1 = (depth0 && depth0.ip_dest)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "', '"
+    + escapeExpression(((stack1 = (depth0 && depth0.domain_dest)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "')\"></a>\n						";
   return buffer;
   }
 function program10(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n							("
+  buffer += "\n								("
     + escapeExpression(((stack1 = (depth0 && depth0.domain_dest)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")\n						";
+    + ")\n							";
   return buffer;
   }
 

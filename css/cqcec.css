@@ -2,23 +2,8 @@ html,
 body {
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
+  overflow-x: hidden;
 }
-
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -60px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px;
-}
-
-#footer {
-  height: 5vh;
-  text-align: center;
-}
-
 
 li.connected_ip {
   list-style: none;
@@ -28,7 +13,7 @@ li.connected_ip {
 }
 
 li.connected_ip:hover{
-  background-color:#df691a;
+  background-color:#f30;
   opacity: 0.9;
 }
 
@@ -40,7 +25,7 @@ li.ip {
 
 ul.ip{
   list-style: none;
-  width: 15em;
+  width: 14em;
   display: inline-block;
   padding: 0em;
 }
@@ -52,13 +37,15 @@ li.ip_add {
   width: inherit;
 }
 
-li.domain {
+span.domain {
+  display: inline-block;
   font-weight: normal;
   font-size: 1em;
   text-align: center;
   width: inherit;
   white-space: nowrap;
   overflow: hidden;
+  width: 12em;
 }
 
 .proto{
@@ -66,7 +53,7 @@ li.domain {
   font-size: 1.3em;
   text-transform: uppercase;
   display: inline-block;
-  width: 15em;
+  width: 9em;
   vertical-align: middle;
   height: inherit;
 }
@@ -118,7 +105,7 @@ ul#connections .more{
   padding: 0em;
   overflow-y: scroll;
   display: block;
-  height: 69vh;
+  height: inherit;
   margin-top:1em;
 }
 
@@ -128,7 +115,7 @@ background-color:#cccccc;
 }
 
 #conn_ips::-webkit-scrollbar-thumb{
-background-color:#df691a;
+background-color:#f30;
 border-radius:10px;
 }
 
@@ -145,7 +132,7 @@ direction:ltr;
 }
 
 .details::-webkit-scrollbar-thumb{
-background-color:#df691a;
+background-color:#f30;
 border-radius:4px;
 }
 
@@ -163,7 +150,7 @@ direction:ltr;
 }
 
 .ip-info-box::-webkit-scrollbar-thumb{
-background-color:#df691a;
+background-color:#f30;
 border-radius:4px;
 }
 
@@ -175,7 +162,9 @@ border-radius:4px;
 
 #web_body {
   display: block;
-  height: 70vh;
+  margin:0em;
+  padding: 0em;
+  height: 76vh;
 }
 
 li span.glyphicon {
@@ -183,7 +172,7 @@ li span.glyphicon {
 }
 
 span.computer_icon {
-  font-size: 5em;
+  font-size: 4em;
   margin: 0em;
 }
 
@@ -242,33 +231,33 @@ background-color:#cccccc;
 }
 
 #connections::-webkit-scrollbar-thumb{
-background-color:#df691a;
+background-color:#f30;
 border-radius:10px;
 }
 
 .number_badge {
-  background-color: white;
+  background-color: #f30;
   border-color: transparent;
-  color: #4e5d6c;
+  color: white;
   font-weight: bold;
-  margin-top: 1.5em;
-  float:left;
+  margin-top: 0.5em;
+  text-decoration: none;
 }
 
 .numconn {
   list-style: none;
   padding: 0em;
-  margin-left: 2em;
+  margin-left: 1em;
   display: inline-block;
-  width: 11vw;
+  width: 9vw;
 }
 
 .sizeconn {
   list-style: none;
   padding: 0em;
-  margin-left: 4em;
+  margin-left: 3em;
   display: inline-block;
-  width: 16vw;
+  width: 14vw;
 }
 
 .connected_ip li {
@@ -294,10 +283,65 @@ background-color:#cccccc;
 }
 
 ul#lastconnections::-webkit-scrollbar-thumb{
-background-color:#df691a;
+background-color:#f30;
 border-radius:10px;
 }
 
 ul#lastconnections li.connection div.more {
   display: none;
 }
+
+#mundoR-l-local-nav .main-tabs>ul>li:first-child {
+  margin-left: 0em;
+}
+
+#mundoR-l-local-nav .main-tabs>ul {
+  margin-left:17em;
+}
+
+#mundoR-l-local-nav {
+  position: absolute;
+  bottom: 0em;
+}
+
+#current-version {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: #F30;
+  color: white;
+  opacity: 0.8;
+  padding: 0 4px;
+  -webkit-border-radius: 0 0 0 5px;
+  -moz-border-radius: 0 0 0 5px;
+  border-radius: 0 0 0 5px;
+  font-size: 10pt;
+}
+
+#mundoR-footer p {
+  color: #fff;
+}
+
+#mundoR-footer a {
+  color:#F30;
+}
+
+#mundoR-header{
+  min-height: 12vh;
+}
+
+#mundoR-content {
+  height: 77vh;
+  margin:0em auto 0em auto;
+}
+
+#mundoR-footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 5vh;
+  padding: 1em 0em;
+  overflow: hidden;
+  text-align: center;
+}
+

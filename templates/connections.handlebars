@@ -6,18 +6,24 @@
 				<ul class="ip">
 					<li class="ip_add">{{this.ip_orig}}</li>
 					<li class="domain">
-						{{#if this.islocal}}
-							(local)
-						{{else}}
-							{{#if this.domain}}
-								({{this.domain}})
+						<span class="domain">
+							{{#if this.islocal}}
+								(local)</span>
 							{{else}}
-								(unknown)
+								{{#if this.domain}}
+									({{this.domain}})
+									<a class="icon-pencil edit_button" href=""></a>
+								{{else}}
+									(unknown)
+									<a class="icon-pencil edit_button" href=""></a>
+								{{/if}}
+								</span>
+							<a class="icon-pencil edit_button" href="javascript:void(0)" onclick="app.edit_domain_cache('{{this.ip_dest}}', '{{this.domain}}')"></a>
 							{{/if}}
-						{{/if}}
+
 					</li>
 				</ul>
-				<span class="glyphicon glyphicon-arrow-right"></span>
+				<span class="icon-chevron-sign-right"></span>
 				<span class="proto">{{this.proto}}</span>
 				{{#if this.number}}
 				<span class="badge number_badge pull-right">{{this.number}}</span>
@@ -38,18 +44,21 @@
 		<li id="conn{{@index}}" class="well well-sm connection" onclick="app.show_ip_connection_details('{{@index}}', '{{this.ip_dest}}')">
 			<div class="brief">
 				<span class="proto">{{this.proto}}</span>
-				<span class="glyphicon glyphicon-arrow-right"></span>
+				<span class="icon-chevron-sign-right"></span>
 				<ul class="ip">
 					<li class="ip_add">{{this.ip_dest}}</li>
 					<li class="domain">
+						<span class="domain">
 						{{#if this.islocal}}
-							(local)
+							(local)</span>
 						{{else}}
 							{{#if this.domain}}
 								({{this.domain}})
 							{{else}}
 								(unknown)
 							{{/if}}
+							</span>
+							<a class="icon-pencil edit_button" href="javascript:void(0)" onclick="app.edit_domain_cache('{{this.ip_dest}}', '{{this.domain}}')"></a>
 						{{/if}}
 					</li>
 				</ul>

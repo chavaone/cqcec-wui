@@ -6,7 +6,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div>\n	<header id=\"ip_info_header\" class=\"page_header\">\n		<button type=\"button\" class=\"btn btn-default glyphicon glyphicon-chevron-left\" onclick=\"app.populate_map_area()\"></button>\n		<h3>";
+  buffer += "<div>\n	<header id=\"ip_info_header\" class=\"page_header\">\n		<button type=\"button\" class=\"btn btn-default icon-chevron-left\" onclick=\"app.populate_map_area()\"></button>\n		<h3>";
   if (stack1 = helpers.ip) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.ip); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)

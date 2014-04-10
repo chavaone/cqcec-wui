@@ -5,15 +5,21 @@
 
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="http://bootswatch.com/superhero/bootstrap.min.css">
+	<meta name="idioma" content="es"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.00"/>
+
+	<link rel="shortcut icon" href="http://static.mundo-r.com/0-latest/images/favicon.ico"/>
+
+	<link rel="stylesheet" href="http://static.mundo-r.com/0-latest/css/r.css"/>
+
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
 	<link rel="stylesheet" href="css/cqcec.css">
 	<link rel="stylesheet" href="css/icons.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	<script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars.runtime-v1.3.0.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="templates/connectiondetails.handlebars.js"></script>
 	<script src="templates/connections.handlebars.js"></script>
 	<script src="templates/historical.handlebars.js"></script>
@@ -26,55 +32,53 @@
 
 </head>
 <body>
-	<div id="wrap">
-		<div class="container">
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					<header class="page-header">
-						<h1>CQCEC <small>v.0.98&beta;</small></h1>
-					</header>
-					<div class="collapse navbar-collapse">
+	<header id="mundoR-header">
+		<div id="mundoR-l-global-nav">
+			<h1 class="site-r">CQCEC</h1>
+			<div id="current-version">
+				<strong>v.0.98&beta;</strong>
+		</div>
+		<div id="mundoR-l-local-nav">
+			<div class="main-tabs l-nav">
+				<ul>
+				  	<li id="map_tab" class="active">
+						<a href="javascript:void(0)" onclick="app.enable_network_map_tab()">
+							Mapa de Rede
+						</a>
+					</li>
 
-						<ul class="nav navbar-nav nav-pills">
-							<li id="map_tab" class="active">
-								<a href="javascript:void(0)" onclick="app.enable_network_map_tab()">
-									<span class="glyphicon glyphicon-cloud"></span>
-									Mapa de Rede
-								</a>
-							</li>
+					<li id="last_conns_tab">
+						<a href="javascript:void(0)" onclick="app.enable_last_connections_tab()">
+							Últimas Conexións
+						</a>
+					</li>
 
-							<li id="last_conns_tab">
-								<a href="javascript:void(0)" onclick="app.enable_last_connections_tab()">
-									<span class="glyphicon glyphicon-sort"></span>
-									Últimas Conexións
-								</a>
-							</li>
-
-							<li id="stats_tab" class="disabled">
-								<a href="javascript:void(0)" onclick="">
-									<span class="glyphicon glyphicon-stats"></span>
-									Estatísticas Globais
-								</a>
-							</li>
-						</ul>
-
-						<div class="pull-right">
-							<a  href="javascript:void(0)" onclick="app.reload()"><i class="icon-refresh icon-large icon" id="reload_main_icon"></i></a>
-						</div>
+					<li id="stats_tab" class="disabled">
+						<a href="javascript:void(0)" onclick="">
+							Estatísticas Globais
+						</a>
+					</li>
+				</ul>
+			  </div>
+		</div>
+		</div>
+		<div class="pull-right">
+						<a  href="javascript:void(0)" onclick="app.reload()"><i class="icon-refresh icon-large icon" id="reload_main_icon"></i></a>
 					</div>
-
-					<div id="web_body"></div>
-
-				</div>
+		</div>
+	</header>
+	<div id="mundoR-content" class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div id="web_body"></div>
 			</div>
 		</div>
 	</div>
-
-	<div id="footer">
+	<footer id="mundoR-footer">
 		<div class="container">
 			<p>Powered by <a href="http://getbootstrap.com/">Bootstrap</a>, <a href="http://glyphicons.com/">Glyphicons</a>, <a href="http://python.org">Python</a>, some magic and some <a href="humans.txt">magicians</a>.</p>
 		</div>
-	</div>
+	</footer>
 
 </body>
 </html>
