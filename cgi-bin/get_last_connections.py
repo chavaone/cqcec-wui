@@ -134,7 +134,8 @@ def filter_and_sort_connections(connections, dns_dict):
              "domain_dest": ipserviceinfo.get_domain_info(x.ip_dest, dns_dict),
              "size_in": x.size_in,
              "size_out": x.size_out}
-            for x in lista if not ipserviceinfo.ip_is_multicast(x.ip_dest)]
+            for x in lista if not (ipserviceinfo.ip_is_multicast(x.ip_dest) or
+                                   ipserviceinfo.ip_is_multicast(x.ip_orig))]
 
 
 def get_router_ip():
@@ -208,7 +209,7 @@ def get_last_conns(bd_name):
     ret = []
     i = 0
 
-    while len(ret) < 30:
+    while len(ret) < 50:
         last_connections = get_last_reg_conns(bd_name, i)
         for c in curr_connections:
             if c not in last_connections:
