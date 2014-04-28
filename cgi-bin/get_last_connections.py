@@ -186,14 +186,16 @@ def connection_json_load(dic):
     return c
 
 
-def get_last_reg_conns(bd_name):
+def get_last_reg_conns(bd_name, index):
     tries = 0
     while tries < 10:
         try:
             with sqlite3.connect(bd_name) as conn:
                 cons = conn.execute("SELECT conns from Historico" +
-                                    " ORDER BY time DESC").fetchone()
-                return json.loads(cons[0], object_hook=connection_json_load)
+                                    " ORDER BY time DESC").fetchmany(index + 1)
+                if len(cons) <= index:
+                    return []
+                return json.loads(cons[-1][0], object_hook=connection_json_load)
         except Exception, e:
             import time
             time.sleep(1)
@@ -203,14 +205,16 @@ def get_last_reg_conns(bd_name):
 
 def get_last_conns(bd_name):
     curr_connections = router_connections()
-    last_connections = get_last_reg_conns(bd_name)
     ret = []
+    i = 0
 
-    for c in curr_connections:
-        if c not in last_connections:
-            ret.append(c)
-            if len(ret) == 30:
-                break
+    while len(ret) < 30:
+        last_connections = get_last_reg_conns(bd_name, i)
+        for c in curr_connections:
+            if c not in last_connections:
+                ret.append(c)
+                curr_connections.remove(c)
+        i = i + 1
     return ret
 
 
