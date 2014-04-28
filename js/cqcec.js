@@ -120,6 +120,9 @@ app.populate_stats = function () {
         return;
     }
 
+    if (! app.historical_data)
+        return;
+
     html_body = Handlebars.templates.historical({});
     $("#web_body").html(html_body);
 
@@ -143,7 +146,7 @@ app.populate_stats = function () {
             strokeColor : "rgba(220,220,220,1)",
             pointColor : "rgba(220,220,220,1)",
             pointStrokeColor : "#fff",
-            data : app.historical_data.map(function (item) {return item.conns;})
+            data : app.historical_data.map(function (item) {return item.conns_size;})
         }]
     },
     {
@@ -347,6 +350,12 @@ $(function () {
 
     app.enable_network_map_tab();
 
+    app.get_last_connections(function (fail, data) {
+        if (!fail) {
+            app.last_connections = data;
+        }
+    });
+
     $("#dialog-edit-domain").dialog(
         {
             title:"Editar Cache",
@@ -378,7 +387,7 @@ $(function () {
                     .find(".ui-button:first") // the first button
                     .addClass("btn btn-default glyphicon glyphicon-remove")
                     .attr("id","boton-dialog-cerrar");
-    }
+            }
         }
     );
 
