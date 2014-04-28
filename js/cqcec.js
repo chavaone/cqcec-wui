@@ -12,7 +12,7 @@ app.get_date_string = function (epoch) {
 };
 
 
-/*Ajax...*/
+/* Ajax... */
 
 app.get_info_from_ip = function (ip, callback){
     $.ajax({
@@ -48,17 +48,34 @@ app.get_last_connections = function (callback) {
     });
 };
 
+app.get_historical = function (callback) {
+    $.ajax({
+        url: "cgi-bin/get_historical.py"
+    }).done(function (data) {
+        nums = data.map(function(item) {
+            var conns = JSON && JSON.parse(item.conns) || $.parseJSON(item.conns);
+            return {"conns_size": conns.length, "time": item.time};
+        });
+        callback(nums);
+    });
+};
 
-/* Templates...*/
+
+/* Templates... */
 
 app.populate_connections = function (connections) {
     var html_body = Handlebars.templates.connections({"connections":connections});
     $("#web_body").html(html_body);
-    app._end_reload();
 };
 
-app.populate_last_connections = function (last_connections) {
-    html_body = Handlebars.templates.lastconnections({"connections":last_connections});
+app.populate_last_connections = function () {
+
+    var active_tab = $("div.l-nav ul li.active")[0].id;
+    if (active_tab && active_tab !== "last_conns_tab"){
+        return;
+    }
+
+    html_body = Handlebars.templates.lastconnections({"connections":app.last_connections});
     $("#web_body").html(html_body);
 };
 
@@ -86,49 +103,52 @@ app.populate_map_area = function () {
         }
     });
 
+    var active_tab = $("div.l-nav ul li.active")[0].id;
+    if (active_tab && active_tab !== "map_tab"){
+        return;
+    }
+
     html_body = Handlebars.templates.networkmap({"connections":app.connections});
     $("#web_body").html(html_body);
 };
 
 app.populate_stats = function () {
-    var ctx;
+    var ctx,x,html_body;
 
-    var html_body = Handlebars.templates.historical({});
+    var active_tab = $("div.l-nav ul li.active")[0].id;
+    if (active_tab && active_tab !== "stats_tab"){
+        return;
+    }
+
+    html_body = Handlebars.templates.historical({});
     $("#web_body").html(html_body);
 
     ctx = document.getElementById("historic_chart").getContext("2d");
 
-    $.ajax({
-        url: "cgi-bin/get_historical.py"
-    }).done(function (data) {
+    x = Math.floor(app.historical_data.length / 6);
 
-        var x = Math.floor(data.length / 6);
+    new Chart(ctx).Line({
+        labels: app.historical_data.map(function (item, index) {
 
-        new Chart(ctx).Line({
-            labels: data.map(function (item, index) {
+            if  ((index !== app.historical_data.length - 1 && (app.historical_data[index + 1].time - app.historical_data[index].time) > 2000) ||
+                (index !== 0 && (app.historical_data[index].time - app.historical_data[index - 1].time) > 2000) ||
+                (index % x === 0)){
+                return app.get_date_string(item.time);
+            }
 
-                if  ((index !== data.length - 1 && (data[index + 1].time - data[index].time) > 2000) ||
-                    (index !== 0 && (data[index].time - data[index - 1].time) > 2000) ||
-                    (index % x === 0)){
-                    return app.get_date_string(item.time);
-                }
-
-                return "";
-            }),
-            datasets: [{
-                fillColor : "rgba(220,220,220,0.5)",
-                strokeColor : "rgba(220,220,220,1)",
-                pointColor : "rgba(220,220,220,1)",
-                pointStrokeColor : "#fff",
-                data : data.map(function (item) {return item.conns;})
-            }]
-        },
-        {
-            scaleShowLabels: true,
-            scaleOverlay:true
-        });
-
-        app._end_reload();
+            return "";
+        }),
+        datasets: [{
+            fillColor : "rgba(220,220,220,0.5)",
+            strokeColor : "rgba(220,220,220,1)",
+            pointColor : "rgba(220,220,220,1)",
+            pointStrokeColor : "#fff",
+            data : app.historical_data.map(function (item) {return item.conns;})
+        }]
+    },
+    {
+        scaleShowLabels: true,
+        scaleOverlay:true
     });
 };
 
@@ -202,20 +222,27 @@ app.reload = function () {
     var fun_dic;
     app._start_reload();
     fun_dic = {
-            "stats_tab": app.populate_stats,
+            "stats_tab": app.reload_stats_tab,
             "map_tab": app.reload_map_tab,
             "last_conns_tab": app.reload_last_connections};
     fun_dic[app.enabled_tab]();
 };
 
-app.reload_stats_tab = function (argument) {
+app.reload_stats_tab = function () {
+    app.populate_stats();
+    app.get_historical(function (data) {
+        app.historical_data = data;
+        app.populate_stats();
+        app._end_reload();
+    });
 };
 
 app.reload_map_tab = function () {
+    app.populate_map_area();
     app.get_connections(function (fail, data) {
 
         if (fail){
-            console.log("MERDA1!!");
+            console.log("MERDA!!");
             return;
         }
 
@@ -226,12 +253,13 @@ app.reload_map_tab = function () {
 };
 
 app.reload_last_connections = function() {
+    app.populate_last_connections();
     app.get_last_connections(function (fail, data) {
         if (fail) {
             console.log("get_last_connections fails!!");
         }
-
-        app.populate_last_connections(data);
+        app.last_connections = data;
+        app.populate_last_connections();
         app._end_reload();
     });
 };
@@ -294,7 +322,6 @@ app.show_ip_last_connection_details = function (id, ip_origen, ip_dest){
             $("#conn" + id + " .more").html(html_body);
         });
     });
-
 };
 
 
@@ -312,7 +339,7 @@ app.edit_domain_cache = function (ip, domain) {
     $("#dialog-edit-domain #domain_field").val(domain);
     $("#dialog-edit-domain #ip_field").val(ip);
     $("#dialog-edit-domain #text_info").html("Editar dominio da IP <b>" + ip + "</b>");
-    $( "#dialog-edit-domain" ).dialog( "open" );
+    $("#dialog-edit-domain" ).dialog( "open" );
 };
 
 
