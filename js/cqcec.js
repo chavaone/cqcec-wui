@@ -60,6 +60,13 @@ app.get_historical = function (callback) {
     });
 };
 
+app.get_ip_historical = function(ip, callback) {
+    $.ajax({
+        url: "cgi-bin/get_individual_historical.py",
+        data: {"ip": ip}
+    }).done(callback);
+};
+
 
 /* Templates... */
 
@@ -147,6 +154,38 @@ app.populate_stats = function () {
             pointColor : "rgba(220,220,220,1)",
             pointStrokeColor : "#fff",
             data : app.historical_data.map(function (item) {return item.conns_size;})
+        }]
+    },
+    {
+        scaleShowLabels: true,
+        scaleOverlay:true
+    });
+};
+
+app.populate_individual_stats = function (ip) {
+    var ctx, x;
+
+    ctx = document.getElementById("historic_chart").getContext("2d");
+
+    x = Math.floor(app.ip_historical[ip].length / 6);
+
+    new Chart(ctx).Line({
+        labels: app.ip_historical[ip].map(function (item, index) {
+
+            if  ((index !== app.ip_historical[ip].length - 1 && (app.ip_historical[ip][index + 1].time - app.ip_historical[ip][index].time) > 2000) ||
+                (index !== 0 && (app.ip_historical[ip][index].time - app.ip_historical[ip][index - 1].time) > 2000) ||
+                (index % x === 0)){
+                return app.get_date_string(item.time);
+            }
+
+            return "";
+        }),
+        datasets: [{
+            fillColor : "rgba(220,220,220,0.5)",
+            strokeColor : "rgba(220,220,220,1)",
+            pointColor : "rgba(220,220,220,1)",
+            pointStrokeColor : "#fff",
+            data : app.ip_historical[ip].map(function (item) {return item.conns;})
         }]
     },
     {
@@ -296,6 +335,19 @@ app.enable_ip_info = function (ip) {
     $("#web_body").html(html_body);
 
     app.enable_ip_info_tab(ip, "Outgoing");
+};
+
+app.enable_ip_stats = function (ip){
+    html_body = Handlebars.templates.historical({});
+    $("#ip_info_body").html(html_body);
+    if(app.ip_historical && app.ip_historical[ip])
+        app.populate_individual_stats(ip);
+    app.get_ip_historical(ip, function (data) {
+        if (! app.ip_historical)
+            app.ip_historical = {};
+        app.ip_historical[ip] = data;
+        app.populate_individual_stats(ip);
+    });
 };
 
 app.enable_ip_info_tab = function (ip, direction){

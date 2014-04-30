@@ -26,7 +26,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.incoming_conn) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.incoming_conn); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span>\n			</a>\n		</li>\n\n		<li id=\"stats_tab\" class=\"disabled\">\n			<a href=\"javascript:void(0)\">\n				<span class=\"glyphicon glyphicon-stats\"></span>\n				Estatísticas\n			</a>\n		</li>\n	</ul>\n	<div id=\"ip_info_body\">\n	</div>\n</div>";
+    + "</span>\n			</a>\n		</li>\n\n		<li id=\"stats_tab\" class=\"disabled\">\n			<a href=\"javascript:void(0)\" onclick=\"app.enable_ip_stats('";
+  if (stack1 = helpers.ip) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.ip); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "')\" >\n				<span class=\"glyphicon glyphicon-stats\"></span>\n				Estatísticas\n			</a>\n		</li>\n	</ul>\n	<div id=\"ip_info_body\">\n	</div>\n</div>";
   return buffer;
   });
 })();
