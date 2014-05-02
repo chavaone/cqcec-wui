@@ -209,7 +209,7 @@ def get_last_conns(bd_name):
     ret = []
     i = 0
 
-    while len(ret) < 50:
+    while len(ret) < 40 and curr_connections and i < 10:
         last_connections = get_last_reg_conns(bd_name, i)
         for c in curr_connections:
             if c not in last_connections:
