@@ -24,7 +24,7 @@ def get_historic(bd_name):
         try:
             with sqlite3.connect(bd_name) as conn:
                 cons = conn.execute("SELECT time, conns from Historico" + \
-                                    " ORDER BY time").fetchall()
+                                    " ORDER BY time").fetchmany(size=1000)
                 return [{"time": x[0], "conns": x[1]} for x in cons]
         except:
             import time
