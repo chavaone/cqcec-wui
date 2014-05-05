@@ -77,6 +77,8 @@ app.populate_connections = function (connections) {
 
 app.populate_last_connections = function () {
 
+    Handlebars.registerHelper('time', app.get_time_text);
+
     var active_tab = $("div.l-nav ul li.active")[0].id;
     if (active_tab && active_tab !== "last_conns_tab"){
         return;
@@ -140,9 +142,7 @@ app.populate_stats = function () {
     new Chart(ctx).Line({
         labels: app.historical_data.map(function (item, index) {
 
-            if  ((index !== app.historical_data.length - 1 && (app.historical_data[index + 1].time - app.historical_data[index].time) > 2000) ||
-                (index !== 0 && (app.historical_data[index].time - app.historical_data[index - 1].time) > 2000) ||
-                (index % x === 0)){
+            if (index % x === 0){
                 return app.get_date_string(item.time);
             }
 
@@ -172,9 +172,7 @@ app.populate_individual_stats = function (ip) {
     new Chart(ctx).Line({
         labels: app.ip_historical[ip].map(function (item, index) {
 
-            if  ((index !== app.ip_historical[ip].length - 1 && (app.ip_historical[ip][index + 1].time - app.ip_historical[ip][index].time) > 2000) ||
-                (index !== 0 && (app.ip_historical[ip][index].time - app.ip_historical[ip][index - 1].time) > 2000) ||
-                (index % x === 0)){
+            if (index % x === 0){
                 return app.get_date_string(item.time);
             }
 
@@ -196,6 +194,11 @@ app.populate_individual_stats = function (ip) {
 
 
 /* Helpers */
+
+
+app.get_time_text = function (num) {
+    return Math.floor(num/60) + " min.";
+};
 
 app.get_size_connections = function (dir, outgoing, incoming) {
     var size = 0;

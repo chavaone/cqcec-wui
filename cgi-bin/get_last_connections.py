@@ -133,7 +133,8 @@ def filter_and_sort_connections(connections, dns_dict):
              "domain_orig": ipserviceinfo.get_domain_info(x.ip_orig, dns_dict),
              "domain_dest": ipserviceinfo.get_domain_info(x.ip_dest, dns_dict),
              "size_in": x.size_in,
-             "size_out": x.size_out}
+             "size_out": x.size_out,
+             "time": x.time}
             for x in lista if not (ipserviceinfo.ip_is_multicast(x.ip_dest) or
                                    ipserviceinfo.ip_is_multicast(x.ip_orig))]
 
@@ -192,11 +193,12 @@ def get_last_reg_conns(bd_name, index):
     while tries < 10:
         try:
             with sqlite3.connect(bd_name) as conn:
-                cons = conn.execute("SELECT conns from Historico" +
+                cons = conn.execute("SELECT time,conns from Historico" +
                                     " ORDER BY time DESC").fetchmany(index + 1)
                 if len(cons) <= index:
-                    return []
-                return json.loads(cons[-1][0], object_hook=connection_json_load)
+                    return (-1, [])
+                return (cons[-1][0], json.loads(cons[-1][1],
+                                                object_hook=connection_json_load))
         except Exception, e:
             import time
             time.sleep(1)
@@ -205,14 +207,19 @@ def get_last_reg_conns(bd_name, index):
 
 
 def get_last_conns(bd_name):
+    from time import time
     curr_connections = router_connections()
     ret = []
     i = 0
+    curr_time = int(time())
 
     while len(ret) < 40 and curr_connections and i < 10:
-        last_connections = get_last_reg_conns(bd_name, i)
+        time, last_connections = get_last_reg_conns(bd_name, i)
+        if not last_connections:
+            break
         for c in curr_connections:
             if c not in last_connections:
+                c.time = curr_time - time
                 ret.append(c)
                 curr_connections.remove(c)
         i = i + 1

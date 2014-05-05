@@ -394,3 +394,8 @@ a.edit_button {
 #boton-dialog-cerrar {
   display: none;
 }
+
+span.time {
+  display: inline-block;
+  font-weight: bold;
+}

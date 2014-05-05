@@ -3,11 +3,11 @@
 templates['lastconnections'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, stack2;
+  var buffer = "", stack1, stack2, options;
   buffer += "\n	<li id=\"conn"
     + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" class=\"well well-sm connection\" onclick=\"app.show_ip_last_connection_details('"
@@ -31,7 +31,10 @@ function program1(depth0,data) {
   buffer += "\n				</li>\n			</ul>\n			";
   stack2 = helpers['if'].call(depth0, (depth0 && depth0.number), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n		</div>\n		<div class=\"more\">\n	 		<hr>\n	 		<div class=\"details\">\n				<i class=\"icon-spin icon-refresh refresh-icon\"></i>\n			</div>\n		</div>\n		</li>\n	";
+  buffer += "\n			<span class=\"time\">(";
+  options = {hash:{},data:data};
+  buffer += escapeExpression(((stack1 = helpers.time || (depth0 && depth0.time)),stack1 ? stack1.call(depth0, (depth0 && depth0.time), options) : helperMissing.call(depth0, "time", (depth0 && depth0.time), options)))
+    + ")</span>\n		</div>\n		<div class=\"more\">\n	 		<hr>\n	 		<div class=\"details\">\n				<i class=\"icon-spin icon-refresh refresh-icon\"></i>\n			</div>\n		</div>\n		</li>\n	";
   return buffer;
   }
 function program2(depth0,data) {
