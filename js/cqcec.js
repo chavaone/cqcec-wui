@@ -256,11 +256,17 @@ app.get_number_of_connections = function (conns) {
 /* Reload... */
 
 app._start_reload = function () {
+    app.reload_queue = app.reload_queue || [];
+    app.reload_queue.push(1);
     $("#reload_main_icon").addClass("icon-spin");
 };
 
 app._end_reload =function  () {
-    $("#reload_main_icon").removeClass("icon-spin");
+    app.reload_queue.pop();
+
+    if (app.reload_queue.length === 0) {
+        $("#reload_main_icon").removeClass("icon-spin");
+    }
 };
 
 app.reload = function () {
