@@ -37,6 +37,17 @@ app.get_connections = function (callback) {
     });
 };
 
+app.get_last_connections_cache = function (callback) {
+    $.ajax({
+        url: "cgi-bin/get_last_connections_cache.py"
+    }).done(function (data) {
+        callback(false, data);
+    }).fail(function () {
+        console.log("Petition fails...");
+        callback(true);
+    });
+};
+
 app.get_last_connections = function (callback) {
     $.ajax({
         url: "cgi-bin/get_last_connections.py"
@@ -305,6 +316,15 @@ app.reload_map_tab = function () {
 
 app.reload_last_connections = function() {
     app.populate_last_connections();
+
+    app.get_last_connections_cache(function (fail, data) {
+        if (fail) {
+            console.log("get_last_connections fails!!");
+        }
+        app.last_connections = data;
+        app.populate_last_connections();
+    });
+
     app.get_last_connections(function (fail, data) {
         if (fail) {
             console.log("get_last_connections fails!!");
@@ -411,7 +431,7 @@ $(function () {
 
     app.enable_network_map_tab();
 
-    app.get_last_connections(function (fail, data) {
+    app.get_last_connections_cache(function (fail, data) {
         if (!fail) {
             app.last_connections = data;
         }
