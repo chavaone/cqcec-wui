@@ -37,6 +37,13 @@ li.ip_add {
   width: inherit;
 }
 
+li.macvendor {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 14em;
+}
+
 span.domain {
   display: inline-block;
   font-weight: normal;
@@ -329,10 +336,6 @@ a.edit_button {
 
 #mundoR-footer a {
   color:#F30;
-}
-
-#mundoR-header{
-  min-height: 12vh;
 }
 
 #mundoR-content {
