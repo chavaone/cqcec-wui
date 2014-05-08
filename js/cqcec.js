@@ -26,9 +26,20 @@ app.get_info_from_ip = function (ip, callback){
     });
 };
 
-app.get_connections = function (callback) {
+app.get_network_map_cache = function (callback) {
     $.ajax({
-        url: "cgi-bin/get_connections.py"
+        url: "cgi-bin/get_network_map_cache.py"
+    }).done(function (data) {
+        callback(false, data);
+    }).fail(function () {
+        console.log("Petition fails...");
+        callback(true);
+    });
+};
+
+app.get_network_map = function (callback) {
+    $.ajax({
+        url: "cgi-bin/get_network_map.py"
     }).done(function (data) {
         callback(false, data);
     }).fail(function () {
@@ -301,10 +312,23 @@ app.reload_stats_tab = function () {
 
 app.reload_map_tab = function () {
     app.populate_map_area();
-    app.get_connections(function (fail, data) {
+    app.get_network_map_cache(function (fail, data) {
 
         if (fail){
-            console.log("MERDA!!");
+            console.log("get_network_map_cache fails!!");
+            console.log(data);
+            return;
+        }
+
+        app.connections = data;
+        app.populate_map_area();
+    });
+
+    app.get_network_map(function (fail, data) {
+
+        if (fail){
+            console.log("get_network_map fails!!");
+            console.log(data);
             return;
         }
 
@@ -312,6 +336,7 @@ app.reload_map_tab = function () {
         app.populate_map_area();
         app._end_reload();
     });
+
 };
 
 app.reload_last_connections = function() {
@@ -319,7 +344,9 @@ app.reload_last_connections = function() {
 
     app.get_last_connections_cache(function (fail, data) {
         if (fail) {
-            console.log("get_last_connections fails!!");
+            console.log("get_last_connections_cache fails!!");
+            consolo.log(data);
+            return;
         }
         app.last_connections = data;
         app.populate_last_connections();
@@ -328,6 +355,8 @@ app.reload_last_connections = function() {
     app.get_last_connections(function (fail, data) {
         if (fail) {
             console.log("get_last_connections fails!!");
+            consolo.log(data);
+            return;
         }
         app.last_connections = data;
         app.populate_last_connections();

@@ -11,7 +11,7 @@ def get_file_name():
     cfg.read(["/etc/cqcec_config.cfg"])
 
     try:
-        file_name = cfg.get("daemon", "last_connections_file")
+        file_name = cfg.get("daemon", "network_map_file")
         return file_name
     except ConfigParser.NoOptionError:
         raise ValueError("Some options (last_connections:last_connections_file) were not found at config file.")
