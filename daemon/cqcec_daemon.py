@@ -417,8 +417,8 @@ def task():
         print_networkmap(networkmap)
 
         insert_hist_data(hist_bd_name, connections)
-    except:
-        print "ERROR!!"
+    except Exception, e:
+        print "ERROR::", e
     print "---------\n"
 
     last_time = int(time.time())
