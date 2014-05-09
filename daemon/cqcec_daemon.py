@@ -394,6 +394,7 @@ def get_last_conns(bd_name, curr_connections):
 
 
 def task():
+    import sys
     global last_time
     global semaphore_mierder
     semaphore_mierder = False
@@ -419,6 +420,7 @@ def task():
     except:
         print "ERROR!!"
     print "---------\n"
+    sys.stdout.flush()
 
     last_time = int(time.time())
     semaphore_mierder = True
