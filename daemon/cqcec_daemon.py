@@ -420,7 +420,6 @@ def task():
     except:
         print "ERROR!!"
     print "---------\n"
-    sys.stdout.flush()
 
     last_time = int(time.time())
     semaphore_mierder = True
@@ -431,7 +430,10 @@ def force_task(signum, stack):
         task()
 
 if __name__ == '__main__':
+    import os
+    import sys
 
+    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
     last_time = 0
     semaphore_mierder = True
     signal.signal(signal.SIGUSR1, force_task)
