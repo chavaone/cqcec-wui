@@ -403,22 +403,33 @@ def task():
         dns_dict = router_dns_cache()
         connections = router_connections()
         hist_bd_name = get_historical_bd_name()
+    except Exception, e:
+        print "ERROR:: ", e
 
+    try:
         last_connections = get_last_conns(hist_bd_name, connections)
         last_connections = filter_and_sort_last_connections(last_connections,
                                                             dns_dict)
         print_last_connections(last_connections)
 
+    except Exception, e:
+        print "ERROR:: ", e
+
+    try:
         networkmap_connections = filter_and_sort_nm_connections(connections,
                                                                 dns_dict)
         networkmap = router_networkmap()
         add_connections(networkmap, networkmap_connections)
         add_mac_vendor(networkmap)
         print_networkmap(networkmap)
+    except Exception, e:
+        print "ERROR:: ", e
 
+    try:
         insert_hist_data(hist_bd_name, connections)
     except Exception, e:
-        print "ERROR::", e
+        print "ERROR:: ", e
+
     print "---------\n"
 
     last_time = int(time.time())
