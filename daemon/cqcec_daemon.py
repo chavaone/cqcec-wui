@@ -380,7 +380,7 @@ def get_last_conns(bd_name, curr_connections):
     i = 0
     curr_time = int(time.time())
 
-    while len(ret) < 40 and curr_connections and i < 10:
+    while len(ret) < 40 and curr_connections and i < 30:
         time, last_connections = get_last_reg_conns(bd_name, i)
         if not last_connections:
             break
@@ -394,7 +394,6 @@ def get_last_conns(bd_name, curr_connections):
 
 
 def task():
-    import sys
     global last_time
     global semaphore_mierder
     semaphore_mierder = False
