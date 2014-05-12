@@ -292,6 +292,8 @@ def filter_and_sort_last_connections(connections, dns_dict):
         except ValueError:
             lista.append(conn)
 
+    lista.sort(key=lambda x: x.time)
+
     return [{"ip_origen": x.ip_orig,
              "ip_dest": x.ip_dest,
              "proto": get_proto_from_port(x.port_dest
@@ -306,7 +308,7 @@ def filter_and_sort_last_connections(connections, dns_dict):
              "size_in": x.size_in,
              "size_out": x.size_out,
              "time": x.time}
-            for x in lista.sort(key=lambda x: x.time)
+            for x in lista
             if not (ipserviceinfo.ip_is_multicast(x.ip_dest) or
                     ipserviceinfo.ip_is_multicast(x.ip_orig))]
 
@@ -386,7 +388,7 @@ def get_last_conns(bd_name, curr_connections):
 
     while len(ret) < 40 and curr_connections:
         time, last_connections = get_last_reg_conns(bd_name, i)
-        if not last_connections:
+        if not last_connections or last_connections is None:
             break
         for c in curr_connections:
             similar_connections = [sm for sm in last_connections if sm == c and
@@ -404,12 +406,18 @@ def task():
     global semaphore_mierder
     semaphore_mierder = False
     print "Time :: %s" % time.ctime()
+
+    hist_bd_name = get_historical_bd_name()
+
     try:
         dns_dict = router_dns_cache()
-        connections = router_connections()
-        hist_bd_name = get_historical_bd_name()
     except Exception, e:
-        print "ERROR:: ", e
+        print "ERROR get_dns::", e
+
+    try:
+        connections = router_connections()
+    except Exception, e:
+        print "ERROR connections::", e
 
     try:
         last_connections = get_last_conns(hist_bd_name, connections)
@@ -418,7 +426,7 @@ def task():
         print_last_connections(last_connections)
 
     except Exception, e:
-        print "ERROR:: ", e
+        print "ERROR last_connections:: ", e
 
     try:
         networkmap_connections = filter_and_sort_nm_connections(connections,
@@ -428,12 +436,12 @@ def task():
         add_mac_vendor(networkmap)
         print_networkmap(networkmap)
     except Exception, e:
-        print "ERROR:: ", e
+        print "ERROR networkmap:: ", e
 
     try:
         insert_hist_data(hist_bd_name, connections)
     except Exception, e:
-        print "ERROR:: ", e
+        print "ERROR insert hist:: ", e
 
     print "---------\n"
 
@@ -442,6 +450,7 @@ def task():
 
 
 def force_task(signum, stack):
+    global semaphore_mierder
     if semaphore_mierder:
         task()
 
