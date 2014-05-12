@@ -251,7 +251,8 @@ def connection_json_load(dic):
     c = connectioninfo.ConnectionInfo(dic["ip_orig"], dic["port_orig"],
                                       dic["ip_dest"], dic["port_dest"],
                                       dic["proto"], dic["dir"],
-                                      dic["size_in"], dic["size_out"])
+                                      dic["size_in"], dic["size_out"],
+                                      dic["ip_nat"], dic["port_nat"])
     return c
 
 
@@ -286,6 +287,8 @@ def filter_and_sort_last_connections(connections, dns_dict):
                 lista[ind].number = 2
                 lista[ind].size_in = lista[ind].size_in + conn.size_in
                 lista[ind].size_in = lista[ind].size_in + conn.size_out
+            lista[ind].time = conn.time if conn.time < lista[ind].time \
+                              else lista[ind].time
         except ValueError:
             lista.append(conn)
 
@@ -303,8 +306,9 @@ def filter_and_sort_last_connections(connections, dns_dict):
              "size_in": x.size_in,
              "size_out": x.size_out,
              "time": x.time}
-            for x in lista if not (ipserviceinfo.ip_is_multicast(x.ip_dest) or
-                                   ipserviceinfo.ip_is_multicast(x.ip_orig))]
+            for x in lista.sort(key=lambda x: x.time)
+            if not (ipserviceinfo.ip_is_multicast(x.ip_dest) or
+                    ipserviceinfo.ip_is_multicast(x.ip_orig))]
 
 
 def filter_and_sort_nm_connections(connections, dns_dict):
@@ -385,7 +389,9 @@ def get_last_conns(bd_name, curr_connections):
         if not last_connections:
             break
         for c in curr_connections:
-            if c not in last_connections:
+            similar_connections = [sm for sm in last_connections if sm == c and
+                                   sm.port_nat == sm.port_nat]
+            if not similar_connections:
                 c.time = curr_time - time
                 ret.append(c)
                 curr_connections.remove(c)
