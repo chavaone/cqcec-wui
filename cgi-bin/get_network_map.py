@@ -46,7 +46,6 @@ if __name__ == '__main__':
 
     try:
         file_name = get_file_name()
-
         begin_time = int(time.time())
         first_time = int(os.path.getmtime(file_name))
 
@@ -54,7 +53,7 @@ if __name__ == '__main__':
         force_update(pid)
 
         while int(os.path.getmtime(file_name)) == first_time and \
-              int(time.time()) - begin_time < 100:
+              int(time.time()) - begin_time < 30:
             time.sleep(2)
 
         with open(file_name, "r") as f:
