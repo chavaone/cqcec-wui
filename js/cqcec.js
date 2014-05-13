@@ -37,7 +37,7 @@ app.get_network_map_cache = function (callback) {
     });
 };
 
-app.get_network_map = function (callback) {
+app.get_network_map  = function (callback) {
     $.ajax({
         url: "cgi-bin/get_network_map.py"
     }).done(function (data) {
@@ -291,77 +291,98 @@ app._end_reload =function  () {
     }
 };
 
-app.reload = function () {
+app.reload = function (force) {
     var fun_dic;
-    app._start_reload();
     fun_dic = {
             "stats_tab": app.reload_stats_tab,
             "map_tab": app.reload_map_tab,
             "last_conns_tab": app.reload_last_connections};
-    fun_dic[app.enabled_tab]();
+    fun_dic[app.enabled_tab](force);
 };
 
-app.reload_stats_tab = function () {
+app.reload_stats_tab = function (force) {
     app.populate_stats();
-    app.get_historical(function (data) {
-        app.historical_data = data;
-        app.populate_stats();
-        app._end_reload();
-    });
+
+    if (! app.reload_time || new Date().getTime() - app.reload_time > 30000 || force) {
+        app._start_reload();
+
+        app.get_historical(function (data) {
+            app.historical_data = data;
+            app.populate_stats();
+            app._end_reload();
+
+            app.reload_time = new Date().getTime();
+        });
+    }
 };
 
-app.reload_map_tab = function () {
+app.reload_map_tab = function (force) {
     app.populate_map_area();
-    app.get_network_map_cache(function (fail, data) {
 
-        if (fail){
-            console.log("get_network_map_cache fails!!");
-            console.log(data);
-            return;
-        }
+    if (! app.reload_time || new Date().getTime() - app.reload_time > 30000 || force) {
+        app._start_reload();
 
-        app.connections = data;
-        app.populate_map_area();
-    });
+        app.get_network_map_cache(function (fail, data) {
 
-    app.get_network_map(function (fail, data) {
+            if (fail){
+                console.log("get_network_map_cache fails!!");
+                console.log(data);
+                return;
+            }
 
-        if (fail){
-            console.log("get_network_map fails!!");
-            console.log(data);
-            return;
-        }
+            app.connections = data;
+            app.populate_map_area();
+        });
 
-        app.connections = data;
-        app.populate_map_area();
-        app._end_reload();
-    });
+
+        app.get_network_map(function (fail, data) {
+
+            if (fail){
+                console.log("get_network_map fails!!");
+                console.log(data);
+                return;
+            }
+
+            app.connections = data;
+            app.populate_map_area();
+            app._end_reload();
+
+            app.reload_time = new Date().getTime();
+        });
+
+    }
 
 };
 
-app.reload_last_connections = function() {
+app.reload_last_connections = function(force) {
     app.populate_last_connections();
 
-    app.get_last_connections_cache(function (fail, data) {
-        if (fail) {
-            console.log("get_last_connections_cache fails!!");
-            consolo.log(data);
-            return;
-        }
-        app.last_connections = data;
-        app.populate_last_connections();
-    });
+    if (! app.reload_time || new Date().getTime() - app.reload_time > 30000 || force) {
+        app._start_reload();
 
-    app.get_last_connections(function (fail, data) {
-        if (fail) {
-            console.log("get_last_connections fails!!");
-            consolo.log(data);
-            return;
-        }
-        app.last_connections = data;
-        app.populate_last_connections();
-        app._end_reload();
-    });
+        app.get_last_connections_cache(function (fail, data) {
+            if (fail) {
+                console.log("get_last_connections_cache fails!!");
+                consolo.log(data);
+                return;
+            }
+            app.last_connections = data;
+            app.populate_last_connections();
+        });
+
+        app.get_last_connections(function (fail, data) {
+            if (fail) {
+                console.log("get_last_connections fails!!");
+                consolo.log(data);
+                return;
+            }
+            app.last_connections = data;
+            app.populate_last_connections();
+            app._end_reload();
+
+            app.reload_time = new Date().getTime();
+        });
+    }
 };
 
 
