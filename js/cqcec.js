@@ -319,6 +319,8 @@ app.reload_stats_tab = function (force) {
 app.reload_map_tab = function (force) {
     app.populate_map_area();
 
+    app._start_reload();
+
     app.get_network_map_cache(function (fail, data) {
 
         if (fail){
@@ -329,6 +331,8 @@ app.reload_map_tab = function (force) {
 
         app.connections = data;
         app.populate_map_area();
+
+        app._end_reload();
     });
 
 
@@ -358,6 +362,8 @@ app.reload_map_tab = function (force) {
 app.reload_last_connections = function(force) {
     app.populate_last_connections();
 
+    app._start_reload();
+
     app.get_last_connections_cache(function (fail, data) {
         if (fail) {
             console.log("get_last_connections_cache fails!!");
@@ -366,6 +372,8 @@ app.reload_last_connections = function(force) {
         }
         app.last_connections = data;
         app.populate_last_connections();
+
+        app._end_reload();
     });
 
     if (! app.reload_time || new Date().getTime() - app.reload_time > 30000 || force) {
