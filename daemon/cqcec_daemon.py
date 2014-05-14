@@ -403,16 +403,18 @@ def get_last_conns(bd_name, curr_connections):
 
 def task():
     global last_time
+    global dns_time
     global semaphore_mierder
     semaphore_mierder = False
     print "Time :: %s" % time.ctime()
 
     hist_bd_name = get_historical_bd_name()
 
-    try:
-        dns_dict = router_dns_cache()
-    except Exception, e:
-        print "ERROR get_dns::", e
+    if int(time.time()) - dns_time > 200:
+        try:
+            dns_dict = router_dns_cache()
+        except Exception, e:
+            print "ERROR get_dns::", e
 
     try:
         connections = router_connections()
@@ -460,6 +462,7 @@ if __name__ == '__main__':
 
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
     last_time = 0
+    dns_time = 0
     semaphore_mierder = True
     signal.signal(signal.SIGUSR1, force_task)
     print_pid()
