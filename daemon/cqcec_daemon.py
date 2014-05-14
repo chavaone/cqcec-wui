@@ -449,7 +449,7 @@ def task():
     except Exception, e:
         print "ERROR insert hist:: ", e
 
-    print "Time needed %i s." % int(time.time()) - init_time
+    print "Time needed %i s." % (int(time.time()) - init_time)
     print "---------\n"
 
     last_time = int(time.time())
