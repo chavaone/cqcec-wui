@@ -380,11 +380,12 @@ def get_last_reg_conns(bd_name, index):
     raise Exception("Database not available:: " + e.message)
 
 
-def get_last_conns(bd_name, curr_connections):
+def get_last_conns(bd_name, connections):
     import time
     ret = []
     i = 0
     curr_time = int(time.time())
+    curr_connections = connections[:]
 
     while len(ret) < 40 and curr_connections:
         time, last_connections = get_last_reg_conns(bd_name, i)
