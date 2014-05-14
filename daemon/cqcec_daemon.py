@@ -408,6 +408,7 @@ def task():
     global dns_dict
     global semaphore_mierder
     semaphore_mierder = False
+    init_time = int(time.time())
     print "Time :: %s" % time.ctime()
 
     hist_bd_name = get_historical_bd_name()
@@ -448,6 +449,7 @@ def task():
     except Exception, e:
         print "ERROR insert hist:: ", e
 
+    print "Time needed %i s." % int(time.time()) - init_time
     print "---------\n"
 
     last_time = int(time.time())
