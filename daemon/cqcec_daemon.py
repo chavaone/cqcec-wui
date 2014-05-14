@@ -413,6 +413,7 @@ def task():
     if int(time.time()) - dns_time > 200:
         try:
             dns_dict = router_dns_cache()
+            dns_time = int(time.time())
         except Exception, e:
             print "ERROR get_dns::", e
 
