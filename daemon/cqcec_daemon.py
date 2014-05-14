@@ -404,6 +404,7 @@ def get_last_conns(bd_name, curr_connections):
 def task():
     global last_time
     global dns_time
+    global dns_dict
     global semaphore_mierder
     semaphore_mierder = False
     print "Time :: %s" % time.ctime()
@@ -464,6 +465,7 @@ if __name__ == '__main__':
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
     last_time = 0
     dns_time = 0
+    dns_dict = {}
     semaphore_mierder = True
     signal.signal(signal.SIGUSR1, force_task)
     print_pid()
