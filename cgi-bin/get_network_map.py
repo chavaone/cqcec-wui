@@ -53,8 +53,8 @@ if __name__ == '__main__':
         force_update(pid)
 
         while int(os.path.getmtime(file_name)) == first_time and \
-              int(time.time()) - begin_time < 30:
-            time.sleep(2)
+              int(time.time()) - begin_time < 120:
+            time.sleep(3)
 
         with open(file_name, "r") as f:
             conns = f.read()
